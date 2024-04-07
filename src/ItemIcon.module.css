@@ -1,0 +1,46 @@
+.icon120x64 {
+    width: 32px;
+    height: 32px;
+    background-position: 56px 0px;
+}
+
+.icon120x65 {
+    width: 32px;
+    height: 32px;
+    background-position: 56px 0px;
+}
+
+.icon32x32 {
+    width: 32px;
+    height: 32px;
+    background-position: 0px 0px;
+    background-size: cover;
+}
+
+.icon64x64 {
+    width: 32px;
+    height: 32px;
+    background-position: 0px 0px;
+    background-size: cover;
+}
+
+.icon64x65 {
+    width: 32px;
+    height: 32px;
+    background-position: 0px 0px;
+    background-size: cover;
+}
+
+.icon128x128 {
+    width: 32px;
+    height: 32px;
+    background-position: 0px 0px;
+    background-size: cover;
+}
+
+.icon240x128 {
+    width: 32px;
+    height: 32px;
+    background-position: 0px 0px;
+    background-size: cover;
+}
