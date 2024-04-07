@@ -7,8 +7,7 @@ export default function SortableAssembler({ assembler }: { assembler: Assembler 
     const { attributes, listeners, setNodeRef, setActivatorNodeRef, isDragging, transform, transition } = useSortable({
         id: assembler.id,
         data: {
-            columnId: assembler.columnId,
-            order: assembler.order
+            columnId: assembler.columnId
         }
     })
 

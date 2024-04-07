@@ -1,9 +1,10 @@
 import { useDroppable } from "@dnd-kit/core"
-import RecipeSelector from "./RecipeSelector"
-import { useAppDispatch, useAppSelector } from "./reduxHooks"
-import { addAssembler } from "./assemblerSlice"
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
+import RecipeSelector from "../RecipeSelector/RecipeSelector"
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks"
+import { addAssembler } from "../../redux/assemblerSlice"
+import { SortableContext, rectSortingStrategy, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import SortableAssembler from "./SortableAssembler"
+import classNames from "classnames"
 
 type AssemblerColumnProps = {
     columnId: string
@@ -11,9 +12,9 @@ type AssemblerColumnProps = {
 }
 
 export default function AssemblerColumn({ columnId, className = "" }: AssemblerColumnProps) {
-    const assemblersInColumn = useAppSelector(state => state.assemblers.assemblerList
-        .filter(a => a.columnId === columnId)
-        .sort((a, b) => a.order - b.order)
+    const assemblerIdsInColumn = useAppSelector(state => state.assemblers.columns[columnId])
+    const assemblersInColumn = useAppSelector(state => state.assemblers.columns[columnId]
+        .map(id => state.assemblers.assemblerList[id])
     )
 
     const dispatch = useAppDispatch()
@@ -26,11 +27,14 @@ export default function AssemblerColumn({ columnId, className = "" }: AssemblerC
     })
 
     return (
-        <SortableContext items={assemblersInColumn.map(a => a.id)} strategy={verticalListSortingStrategy}>
+        <SortableContext items={assemblerIdsInColumn} strategy={rectSortingStrategy}>
             <div
                 ref={setNodeRef}
-                className={`${className} rounded-md border ${isOver ? "border-stone-500" : "border-stone-700"
-                    }`}
+                className={classNames(
+                    className, 
+                    isOver ? "border-stone-500" : "border-stone-700", 
+                    "rounded-md border"
+                )}
             >
                 <RecipeSelector
                     onChange={(recipeName) => dispatch(addAssembler({ recipeName, columnId }))}

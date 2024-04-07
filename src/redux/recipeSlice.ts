@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { defaultRecipes } from './defaultRecipes'
+import { defaultRecipes } from '../utilities/defaultRecipes'
 
 export const recipeSlice = createSlice({
   name: 'recipes',

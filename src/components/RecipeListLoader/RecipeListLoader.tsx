@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Button, { FileInput } from "./Button";
+import Button, { FileInput } from "../_ui_components/Button";
 import { useDispatch } from "react-redux";
-import { loadRecipes } from "./recipeSlice";
+import { loadRecipes } from "../../redux/recipeSlice";
 
 export default function RecipeListLoader() {
     const [file, setFile] = useState<File | null>(null)

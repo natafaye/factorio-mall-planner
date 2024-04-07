@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Button from "./Button";
+import Button from "../_ui_components/Button";
 import styles from "./RecipeSelector.module.css"
-import ItemIcon from "./ItemIcon";
-import { useAppSelector } from "./reduxHooks";
+import ItemIcon from "../ItemIcon/ItemIcon";
+import { useAppSelector } from "../../redux/reduxHooks";
 
 type RecipeSelectorProps = {
     onChange: (newValue: string) => void
@@ -49,6 +49,7 @@ export default function RecipeSelector({ onChange, children }: RecipeSelectorPro
                     <div className="mt-2">
                         {recipesInGroup.map(r => (
                             <button 
+                                key={r.name}
                                 onClick={() => handleItemClick(r)}
                                 className="p-1 pb-0 hover:bg-stone-600"
                             >

@@ -10,6 +10,5 @@ type Recipe = {
 type Assembler = {
     id: string
     recipeName: string
-    order: number
     columnId: string
 }

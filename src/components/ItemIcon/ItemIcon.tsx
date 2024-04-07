@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import styles from "./ItemIcon.module.css"
 
-export default function ItemImage({ name, style, className = "", ...props }: { name: string } & React.HTMLAttributes<HTMLSpanElement>) {
+export default function ItemImage({ 
+  name, style, className = "", ...props 
+}: { name: string } & React.HTMLAttributes<HTMLSpanElement>) {
   const [spriteSize, setSpriteSize] = useState("120x64")
-  const [imageURL, setImageURL] = useState()
   
   let imageName = name
   if(name.startsWith("kr-")) {
@@ -12,8 +13,8 @@ export default function ItemImage({ name, style, className = "", ...props }: { n
     imageName = name.substring(5)
   }
 
-  let url = new URL(`./assets/icons/${imageName}.png`, import.meta.url)
-  if(url.pathname === "/src/undefined") url = new URL(`./assets/icons/none.png`, import.meta.url)
+  let url = new URL(`../../assets/icons/${imageName}.png`, import.meta.url)
+  if(url.pathname.endsWith("undefined")) url = new URL(`../../assets/icons/none.png`, import.meta.url)
 
   useEffect(() => {
     const image = new Image()

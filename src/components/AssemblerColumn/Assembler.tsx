@@ -1,7 +1,7 @@
 import { CSSProperties, ReactNode, forwardRef } from "react"
-import ItemImage from "./ItemIcon"
-import { removeAssembler } from "./assemblerSlice"
-import { useAppDispatch, useAppSelector } from "./reduxHooks"
+import ItemImage from "../ItemIcon/ItemIcon"
+import { removeAssembler } from "../../redux/assemblerSlice"
+import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks"
 
 type AssemblerProps = {
     assembler: Assembler
@@ -28,7 +28,7 @@ const Assembler = forwardRef<HTMLDivElement, AssemblerProps>(
                         {children}
                     </div>
                     <button
-                        onClick={() => dispatch(removeAssembler(assembler.id))}
+                        onClick={() => dispatch(removeAssembler(assembler))}
                         className="text-stone-500 font-bold hover:bg-stone-600 hover:text-stone-400 -ms-7 p-2 py-1 rounded-md"
                     >
                         &#x2715;
@@ -37,7 +37,7 @@ const Assembler = forwardRef<HTMLDivElement, AssemblerProps>(
                 <ItemImage name={assembler.recipeName} />
                 <div className="flex flex-wrap gap-2 m-3">
                     {recipe?.ingredients.map(i => (
-                        <div>
+                        <div key={i.name}>
                             <div className="bg-stone-900 p-1 ps-2 text-white rounded-t-lg flex items-center">
                                 {i.amount}
                                 <ItemImage key={i.name} name={i.name} className="ms-1" />
