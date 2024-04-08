@@ -1,20 +1,26 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 const initialState: { 
-    supplyList: Array<string>
+    lines: Array<Array<string>>
 } = {
-    supplyList: []
+    lines: [[], [], []]
 }
 
 export const supplySlice = createSlice({
     name: 'supplyLines',
     initialState,
     reducers: {
-        addSupply: (state, action: PayloadAction<string>) => {
-            return { ...state, supplyList: [...state.supplyList, action.payload] }
+        addSupply: (state, action: PayloadAction<{ name: string, index: number}>) => {
+            const { name, index } = action.payload
+            state.lines[index].push(name)
+        },
+        removeSupply: (state, action: PayloadAction<{ name: string, index: number}>) => {
+            const { name, index } = action.payload
+            const nameIndex = state.lines[index].indexOf(name)
+            state.lines[index].splice(nameIndex, 1)
         }
     },
 })
 
 export const supplyReducer = supplySlice.reducer
-export const { addSupply } = supplySlice.actions
+export const { addSupply, removeSupply } = supplySlice.actions

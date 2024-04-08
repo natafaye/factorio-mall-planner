@@ -1,10 +1,11 @@
 import { CollisionDetection, UniqueIdentifier, closestCenter, 
     getFirstCollision, pointerWithin, rectIntersection } from "@dnd-kit/core";
 import { useCallback } from "react";
+import { Columns } from "../redux/assemblerSlice";
 
 type UseMultipleContainersCollisionDetectionProps = {
     activeId: UniqueIdentifier | null
-    items: { [index: string]: Array<UniqueIdentifier> }
+    data: Columns
     lastOverId: React.MutableRefObject<UniqueIdentifier | null>
     recentlyMovedToNewContainer: React.MutableRefObject<boolean>
 }
@@ -20,13 +21,13 @@ type UseMultipleContainersCollisionDetectionProps = {
    *
    */
 export const useMultipleContainersCollisionDetection = (
-    { activeId, items, lastOverId, recentlyMovedToNewContainer }: UseMultipleContainersCollisionDetectionProps
+    { activeId, data, lastOverId, recentlyMovedToNewContainer }: UseMultipleContainersCollisionDetectionProps
 ): CollisionDetection => useCallback((args) => {
-    if (activeId && activeId in items) {
+    if (activeId && activeId in data) {
         return closestCenter({
             ...args,
             droppableContainers: args.droppableContainers.filter(
-                (container) => container.id in items
+                (container) => container.id in data
             ),
         });
     }
@@ -42,8 +43,8 @@ export const useMultipleContainersCollisionDetection = (
 
     if (overId != null) {
 
-        if (overId in items) {
-            const containerItems = items[overId];
+        if (overId in data) {
+            const containerItems = data[overId];
 
             // If a container is matched and it contains items (columns 'A', 'B', 'C')
             if (containerItems.length > 0) {
@@ -53,7 +54,7 @@ export const useMultipleContainersCollisionDetection = (
                     droppableContainers: args.droppableContainers.filter(
                         (container) =>
                             container.id !== overId &&
-                            containerItems.includes(container.id)
+                            containerItems.includes(container.id.toString())
                     ),
                 })[0]?.id;
             }
@@ -74,4 +75,4 @@ export const useMultipleContainersCollisionDetection = (
 
     // If no droppable is matched, return the last match
     return lastOverId.current ? [{ id: lastOverId.current }] : [];
-}, [items, activeId])
+}, [data, activeId])

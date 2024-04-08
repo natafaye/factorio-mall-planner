@@ -7,7 +7,7 @@ import { coordinateGetter as multipleContainersCoordinateGetter } from '../utili
 import { Item, SortableItem } from './Item';
 import { DroppableContainer } from './Container';
 import { useMultipleContainersCollisionDetection } from '../utilities/useMultipleContainersCollisionDetection';
-import { findContainer } from '../utilities/sortingUtilities';
+import { findContainer } from '../utilities/findColumnId';
 
 type Items = Record<UniqueIdentifier, UniqueIdentifier[]>;
 const PLACEHOLDER_ID = 'placeholder';

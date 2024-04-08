@@ -1,10 +1,10 @@
 import { useDroppable } from "@dnd-kit/core"
-import RecipeSelector from "../RecipeSelector/RecipeSelector"
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable"
+import classNames from "classnames"
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks"
 import { addAssembler } from "../../redux/assemblerSlice"
-import { SortableContext, rectSortingStrategy, verticalListSortingStrategy } from "@dnd-kit/sortable"
+import RecipeSelector from "../RecipeSelector/RecipeSelector"
 import SortableAssembler from "./SortableAssembler"
-import classNames from "classnames"
 
 type AssemblerColumnProps = {
     columnId: string

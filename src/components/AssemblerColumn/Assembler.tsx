@@ -13,7 +13,7 @@ type AssemblerProps = {
 const Assembler = forwardRef<HTMLDivElement, AssemblerProps>(
     ({ assembler, children, className = "", style = {} }, ref) => {
         const recipe = useAppSelector(state => state.recipes.recipeList.find(r => r.name === assembler.recipeName))
-        const supplyList = useAppSelector(state => state.supplyLines.supplyList)
+        const supplyList = useAppSelector(state => state.supplyLines.lines.flatMap(line => line))
 
         const dispatch = useAppDispatch()
 
