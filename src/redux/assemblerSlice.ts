@@ -50,6 +50,11 @@ export const assemblerSlice = createSlice({
                 assemblerId,
                 ...state.columns[newColumnId].slice(newIndex)
             ]
+
+            state.assemblerList[assemblerId] = { 
+                ...state.assemblerList[assemblerId], 
+                columnId: newColumnId
+            }
         }
     },
 })
