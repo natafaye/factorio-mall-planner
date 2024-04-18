@@ -8,7 +8,7 @@ import { Columns, moveAssembler, replaceColumns } from "../../redux/assemblerSli
 import { useMultipleContainersCollisionDetection } from "../../utilities/useMultipleContainersCollisionDetection";
 import { multipleContainersKeyboardCoordinateGetter } from "../../utilities/multipleContainersKeyboardCoordinates";
 import { findColumnId } from "../../utilities/findColumnId";
-import Assembler from "../AssemblerColumn/Assembler";
+import AssemblerCard from "../AssemblerColumn/AssemblerCard";
 import DragHandle from "../AssemblerColumn/DragHandle";
 
 export default function SortingContext({ children, data }: { children: ReactNode, data: Columns }) {
@@ -126,9 +126,9 @@ export default function SortingContext({ children, data }: { children: ReactNode
             {children}
             <DragOverlay className="w-64" dropAnimation={{ duration: 250, easing: "ease" }}>
                 {!activeItem ? null : (
-                    <Assembler key={activeItem.id} assembler={activeItem}>
+                    <AssemblerCard key={activeItem.id} assembler={activeItem}>
                         <DragHandle />
-                    </Assembler>
+                    </AssemblerCard>
                 )}
             </DragOverlay>
         </DndContext>

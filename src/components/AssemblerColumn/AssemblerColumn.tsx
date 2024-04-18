@@ -4,7 +4,7 @@ import classNames from "classnames"
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks"
 import { addAssembler } from "../../redux/assemblerSlice"
 import RecipeSelector from "../RecipeSelector/RecipeSelector"
-import SortableAssembler from "./SortableAssembler"
+import SortableAssemblerCard from "./SortableAssemblerCard"
 
 type AssemblerColumnProps = {
     columnId: string
@@ -40,7 +40,7 @@ export default function AssemblerColumn({ columnId, className = "" }: AssemblerC
                     onChange={(recipeName) => dispatch(addAssembler({ recipeName, columnId }))}
                 >+ Assembling Machine</RecipeSelector>
                 {assemblersInColumn.map(assembler => (
-                    <SortableAssembler key={assembler.id} assembler={assembler} />
+                    <SortableAssemblerCard key={assembler.id} assembler={assembler} />
                 ))}
             </div>
         </SortableContext>

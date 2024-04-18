@@ -75,4 +75,4 @@ export const useMultipleContainersCollisionDetection = (
 
     // If no droppable is matched, return the last match
     return lastOverId.current ? [{ id: lastOverId.current }] : [];
-}, [data, activeId])
+}, [data, activeId, lastOverId, recentlyMovedToNewContainer])

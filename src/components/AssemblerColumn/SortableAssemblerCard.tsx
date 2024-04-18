@@ -1,9 +1,10 @@
-import Assembler from "./Assembler"
+import AssemblerCard from "./AssemblerCard"
 import DragHandle from "./DragHandle"
 import { CSS } from "@dnd-kit/utilities"
 import { useSortable } from "@dnd-kit/sortable"
+import type { Assembler } from "../../types"
 
-export default function SortableAssembler({ assembler }: { assembler: Assembler }) {
+export default function SortableAssemblerCard({ assembler }: { assembler: Assembler }) {
     const { attributes, listeners, setNodeRef, setActivatorNodeRef, isDragging, transform, transition } = useSortable({
         id: assembler.id,
         data: {
@@ -17,7 +18,7 @@ export default function SortableAssembler({ assembler }: { assembler: Assembler 
     }
 
     return (
-        <Assembler 
+        <AssemblerCard 
             style={style} 
             ref={setNodeRef} 
             className={isDragging ? "opacity-25" : ""} 
@@ -28,6 +29,6 @@ export default function SortableAssembler({ assembler }: { assembler: Assembler 
                 {...listeners}
                 {...attributes}
             />
-        </Assembler>
+        </AssemblerCard>
     )
 }

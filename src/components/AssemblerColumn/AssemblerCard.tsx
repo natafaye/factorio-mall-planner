@@ -2,6 +2,7 @@ import { CSSProperties, ReactNode, forwardRef } from "react"
 import ItemIcon from "../ItemIcon"
 import { removeAssembler } from "../../redux/assemblerSlice"
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks"
+import type { Assembler } from "../../types"
 
 type AssemblerProps = {
     assembler: Assembler
@@ -10,7 +11,7 @@ type AssemblerProps = {
     style?: CSSProperties
 }
 
-const Assembler = forwardRef<HTMLDivElement, AssemblerProps>(
+const AssemblerCard = forwardRef<HTMLDivElement, AssemblerProps>(
     ({ assembler, children, className = "", style = {} }, ref) => {
         const recipe = useAppSelector(state => state.recipes.recipeList.find(r => r.name === assembler.recipeName))
         const supplyList = useAppSelector(state => state.supplyLines.lines.flatMap(line => line))
@@ -52,4 +53,4 @@ const Assembler = forwardRef<HTMLDivElement, AssemblerProps>(
     }
 )
 
-export default Assembler
+export default AssemblerCard

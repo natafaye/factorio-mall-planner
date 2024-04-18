@@ -1,3 +1,5 @@
+import type { Recipe } from "../types";
+
 export const defaultRecipes: Array<Recipe> = [
     { name: "Arci-asphalt", time: 10, subgroup: "i", group: "logistics", products: [{ name: "Arci-asphalt", amount: 10 }], ingredients: [{ name: "stone-brick", amount: 4 }, { name: "crude-oil", amount: 30 }, { name: "heavy-oil", amount: 30 }] },
     { name: "Arci-asphalt-hazard-blue", time: 0.25, subgroup: "i", group: "logistics", products: [{ name: "Arci-asphalt-hazard-blue", amount: 10 }], ingredients: [{ name: "Arci-asphalt", amount: 10 }] },

@@ -1,4 +1,4 @@
-import { Recipe } from "../types";
+import type { Recipe } from "../types";
 import { getBaseName } from "./getBaseName";
 
 export const filterOutNonUsefulRecipes = (recipeList: Array<Recipe>) => {

@@ -3,7 +3,7 @@ import Button from "../_ui_components/Button";
 import styles from "./RecipeSelector.module.css"
 import ItemIcon from "../ItemIcon";
 import { useAppSelector } from "../../redux/reduxHooks";
-import { Recipe } from "../../types";
+import type { Recipe } from "../../types";
 
 type RecipeSelectorProps = {
     onChange: (newValue: string) => void

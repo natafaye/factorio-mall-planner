@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { v4 as uuid } from "uuid"
-import { findColumnId } from '../utilities/findColumnId'
+import type { Assembler } from '../types'
 
 export type Columns = Record<string, Array<string>>
 
