@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks"
 import { addSupply, removeSupply } from "../../redux/supplySlice"
-import ItemImage from "../ItemIcon/ItemIcon"
+import ItemIcon from "../ItemIcon"
 import RecipeSelector from "../RecipeSelector/RecipeSelector"
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons"
 
@@ -23,9 +23,9 @@ export default function SupplyColumn({ index }: { index: number }) {
                             &#x2715;
                         </button>
                         <FontAwesomeIcon icon={faAngleDown} className="text-yellow-400" />
-                        <ItemImage key={item} name={item} />
+                        <ItemIcon name={item} />
                         <FontAwesomeIcon icon={faAngleDown} className="text-yellow-400" />
-                        <ItemImage key={item} name={item} />
+                        <ItemIcon name={item} />
                         <FontAwesomeIcon icon={faAngleDown} className="text-yellow-400" />
                     </div>
                 ))}

@@ -1,21 +1,20 @@
 import { useState } from "react";
 import Button from "../_ui_components/Button";
 import styles from "./RecipeSelector.module.css"
-import ItemIcon from "../ItemIcon/ItemIcon";
+import ItemIcon from "../ItemIcon";
 import { useAppSelector } from "../../redux/reduxHooks";
+import { Recipe } from "../../types";
 
 type RecipeSelectorProps = {
     onChange: (newValue: string) => void
     children: React.ReactNode
 }
 
-type IconGroup = "logistics" | "production" | "intermediate-products" | "combat"
-
-const groups = ["logistics", "production", "intermediate-products", "combat"] as Array<IconGroup>
-
 export default function RecipeSelector({ onChange, children }: RecipeSelectorProps) {
     const [showMenu, setShowMenu] = useState(false)
-    const [selectedGroup, setSelectedGroup] = useState<IconGroup>("logistics")
+
+    const groups = useAppSelector(state => [...new Set(state.recipes.recipeList.map(r => r.group))])
+    const [selectedGroup, setSelectedGroup] = useState<string>(groups[0])
 
     const recipesInGroup = useAppSelector(state => state.recipes.recipeList
         .filter(r => r.group === selectedGroup)
@@ -41,7 +40,7 @@ export default function RecipeSelector({ onChange, children }: RecipeSelectorPro
                                     selectedGroup === groupName ? "bg-[orange]" : "bg-stone-600"
                                 }`}
                             >
-                                <span className={`inline-block ${styles[groupName]}`}></span>
+                                <ItemIcon className={styles.groupIcon} name={groupName}/>
                             </button>
                         ))}
 

@@ -1,33 +1,24 @@
-import { useEffect, useState } from "react"
+import { useMemo } from "react"
 import styles from "./ItemIcon.module.css"
+import { getBaseName } from "../../utilities/getBaseName"
+import { useImage } from "./useImage"
 
-export default function ItemImage({ 
-  name, style, className = "", ...props 
+export default function ItemImage({
+  name, style, className = "", ...props
 }: { name: string } & React.HTMLAttributes<HTMLSpanElement>) {
-  const [spriteSize, setSpriteSize] = useState("120x64")
-  
-  let imageName = name
-  if(name.startsWith("kr-")) {
-    imageName = name.substring(3)
-  } else if(name.startsWith("Arci-")) {
-    imageName = name.substring(5)
-  }
+  const imageName = useMemo(() => getBaseName(name), [name])
+  const { width, height, path } = useImage({
+    imageName: imageName,
+    fallbackName: "none",
+    folderPath: "../../assets/icons/",
+    basePath: import.meta.url,
+    defaultSize: { width: 120, height: 64 }
+  })
 
-  let url = new URL(`../../assets/icons/${imageName}.png`, import.meta.url)
-  if(url.pathname.endsWith("undefined")) url = new URL(`../../assets/icons/none.png`, import.meta.url)
-
-  useEffect(() => {
-    const image = new Image()
-    image.onload = function() {
-      setSpriteSize(`${image.width}x${image.height}`)
-    }
-    image.src = url.href
-  }, [name])
-  
   return (
-    <span 
-      className={`${styles["icon" + spriteSize]} ${className} inline-block`} 
-      style={{ backgroundImage: `url(${url.href})`, ...style }}
+    <span
+      className={`${styles[`icon${width}x${height}`]} ${className} inline-block`}
+      style={{ backgroundImage: `url(${path})`, ...style }}
       title={name}
       {...props}
     />

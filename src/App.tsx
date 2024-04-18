@@ -3,6 +3,7 @@ import SupplyColumn from "./components/SupplyColumn/SupplyColumn";
 import SortingContext from "./components/SortingContext/SortingContext";
 import { useMemo } from "react";
 import { useAppSelector } from "./redux/reduxHooks";
+import RecipeListLoader from "./components/RecipeListLoader/RecipeListLoader";
 
 export default function App() {
   const columns = useAppSelector(state => state.assemblers.columns)
@@ -12,7 +13,7 @@ export default function App() {
     <SortingContext data={columns}>
       <div className="flex flex-col min-h-screen">
         <div className="bg-stone-900">
-          
+          <RecipeListLoader/>
         </div>
         <div className="flex flex-grow overflow-auto m-5 gap-5">
           <SupplyColumn index={0} />

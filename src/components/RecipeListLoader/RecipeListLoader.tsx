@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button, { FileInput } from "../_ui_components/Button";
 import { useDispatch } from "react-redux";
 import { loadRecipes } from "../../redux/recipeSlice";
+import { filterOutNonUsefulRecipes } from "../../utilities/filterOutNonUsefulRecipes";
 
 export default function RecipeListLoader() {
     const [file, setFile] = useState<File | null>(null)
@@ -26,8 +27,11 @@ export default function RecipeListLoader() {
             fileReader.onload = (e) => {
                 if (e.target && typeof e.target.result === "string") {
                     const loadedRecipes = JSON.parse(e.target.result)
-                    dispatch(loadRecipes(loadedRecipes))
-                    setStatusMessage(`Loaded ${loadedRecipes.length} recipes`)
+                    const usefulRecipes = filterOutNonUsefulRecipes(loadedRecipes)
+                    dispatch(loadRecipes(usefulRecipes))
+                    setStatusMessage(
+                        `Loaded ${usefulRecipes.length} recipes, filtered out ${loadedRecipes.length - usefulRecipes.length}`
+                    )
                     setIsError(false)
                 } else {
                     setStatusMessage("You must select a file to parse")
