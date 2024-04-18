@@ -2,8 +2,9 @@ import { useState } from "react";
 import Button from "../_ui_components/Button";
 import styles from "./RecipeSelector.module.css"
 import ItemIcon from "../ItemIcon";
-import { useAppSelector } from "../../redux/reduxHooks";
 import type { Recipe } from "../../types";
+import { makeSelectRecipesInGroup, selectGroups } from "../../redux/recipeSlice";
+import { useAppSelector } from "../../redux/reduxHooks";
 
 type RecipeSelectorProps = {
     onChange: (newValue: string) => void
@@ -13,13 +14,10 @@ type RecipeSelectorProps = {
 export default function RecipeSelector({ onChange, children }: RecipeSelectorProps) {
     const [showMenu, setShowMenu] = useState(false)
 
-    const groups = useAppSelector(state => [...new Set(state.recipes.recipeList.map(r => r.group))])
+    const groups = useAppSelector(selectGroups)
     const [selectedGroup, setSelectedGroup] = useState<string>(groups[0])
-
-    const recipesInGroup = useAppSelector(state => state.recipes.recipeList
-        .filter(r => r.group === selectedGroup)
-        .sort((a, b) => a.subgroup.localeCompare(b.subgroup))
-    )
+    
+    const recipesInGroup = useAppSelector(makeSelectRecipesInGroup(selectedGroup))
 
     const handleItemClick = (recipe: Recipe) => {
         onChange(recipe.name)

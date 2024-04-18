@@ -1,6 +1,7 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
 import { v4 as uuid } from "uuid"
 import type { Assembler } from '../types'
+import { RootState } from './store'
 
 export type Columns = Record<string, Array<string>>
 
@@ -36,7 +37,7 @@ export const assemblerSlice = createSlice({
         replaceColumns: (state, action: PayloadAction<Columns>) => {
             state.columns = action.payload
         },
-        moveAssembler: (state, action: PayloadAction<{ 
+        moveAssembler: (state, action: PayloadAction<{
             oldColumnId: string, newColumnId: string, newIndex: number, assemblerId: string
         }>) => {
             const { oldColumnId, newColumnId, newIndex, assemblerId } = action.payload
@@ -44,9 +45,9 @@ export const assemblerSlice = createSlice({
             const oldIndex = state.columns[oldColumnId].indexOf(assemblerId)
             state.columns[oldColumnId].splice(oldIndex, 1)
 
-            state.columns[newColumnId] = [ 
-                ...state.columns[newColumnId].slice(0, newIndex), 
-                assemblerId, 
+            state.columns[newColumnId] = [
+                ...state.columns[newColumnId].slice(0, newIndex),
+                assemblerId,
                 ...state.columns[newColumnId].slice(newIndex)
             ]
         }
@@ -55,3 +56,17 @@ export const assemblerSlice = createSlice({
 
 export const assemblerReducer = assemblerSlice.reducer
 export const { addAssembler, removeAssembler, moveAssembler, replaceColumns } = assemblerSlice.actions
+
+export const makeSelectColumnById = (columnId: string) =>
+    (state: RootState) => state.assemblers.columns[columnId]
+
+const selectAllAssemblers = (state: RootState) => state.assemblers.assemblerList
+
+export const makeSelectAssemblersInColumn = (columnId: string) =>
+    createSelector(
+        [
+            makeSelectColumnById(columnId),
+            selectAllAssemblers
+        ],
+        (column, allAssemblers) => column.map(id => allAssemblers[id])
+    )

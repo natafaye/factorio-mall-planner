@@ -3,6 +3,8 @@ import ItemIcon from "../ItemIcon"
 import { removeAssembler } from "../../redux/assemblerSlice"
 import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks"
 import type { Assembler } from "../../types"
+import { makeSelectRecipeByName } from "../../redux/recipeSlice"
+import { makeSelectAdjacentSupplyLines } from "../../redux/supplySlice"
 
 type AssemblerProps = {
     assembler: Assembler
@@ -13,8 +15,8 @@ type AssemblerProps = {
 
 const AssemblerCard = forwardRef<HTMLDivElement, AssemblerProps>(
     ({ assembler, children, className = "", style = {} }, ref) => {
-        const recipe = useAppSelector(state => state.recipes.recipeList.find(r => r.name === assembler.recipeName))
-        const supplyList = useAppSelector(state => state.supplyLines.lines.flatMap(line => line))
+        const recipe = useAppSelector(makeSelectRecipeByName(assembler.recipeName))
+        const supplyList = useAppSelector(makeSelectAdjacentSupplyLines(assembler.columnId))
 
         const dispatch = useAppDispatch()
 

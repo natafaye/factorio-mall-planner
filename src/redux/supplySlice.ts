@@ -1,4 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
+import { RootState } from './store'
 
 const initialState: { 
     lines: Array<Array<string>>
@@ -24,3 +25,11 @@ export const supplySlice = createSlice({
 
 export const supplyReducer = supplySlice.reducer
 export const { addSupply, removeSupply } = supplySlice.actions
+
+const selectAllSupplyLines = (state: RootState) => state.supplyLines.lines
+
+export const makeSelectAdjacentSupplyLines = (columnId: string) =>
+    createSelector(
+        [selectAllSupplyLines],
+        (allLines) => allLines.flatMap(line => line)
+    )
