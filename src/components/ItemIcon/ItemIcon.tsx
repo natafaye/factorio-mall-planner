@@ -10,8 +10,7 @@ export default function ItemImage({
   const { width, height, path } = useImage({
     imageName: imageName,
     fallbackName: "none",
-    folderPath: "../../assets/icons/",
-    basePath: import.meta.url,
+    folderPath: "/factorio-mall-planner/assets/icons/",
     defaultSize: { width: 120, height: 64 }
   })
 

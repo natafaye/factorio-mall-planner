@@ -6,17 +6,16 @@ type UseImageProps = {
     imageName: string, 
     fallbackName: string, 
     folderPath: string,
-    basePath: string, 
     defaultSize: { width: number, height: number }
 }
 
-export const useImage = ({imageName, fallbackName, folderPath, basePath}: UseImageProps) => {
+export const useImage = ({imageName, fallbackName, folderPath}: UseImageProps) => {
     // Initial state is the info from the cache, 
     // or the fallback (which will be overwritten if the image exists)
     const [imageDetails, setImageDetails] = useState(() => cache.get(imageName) || {
         width: 64,
         height: 64,
-        path: new URL(folderPath + fallbackName + ".png", basePath).href
+        path: folderPath + fallbackName + ".png"
     })
     
     useEffect(() => {
@@ -35,8 +34,8 @@ export const useImage = ({imageName, fallbackName, folderPath, basePath}: UseIma
             cache.set(imageName, loadedDetails)
         }
         // Set the image path to start the loading in
-        image.src = new URL(folderPath + imageName + ".png", basePath).href
-    }, [imageName, folderPath, basePath])
+        image.src = folderPath + imageName + ".png"
+    }, [imageName, folderPath])
 
     return imageDetails
 }
