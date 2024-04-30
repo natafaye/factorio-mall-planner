@@ -1,7 +1,7 @@
 import { useMemo } from "react"
-import styles from "./ItemIcon.module.css"
-import { getBaseName } from "../../utilities/getBaseName"
+import { getBaseName } from "../../shared"
 import { useImage } from "./useImage"
+import styles from "./ItemIcon.module.css"
 
 export default function ItemImage({
   name, style, className = "", ...props

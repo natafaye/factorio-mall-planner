@@ -1,10 +1,11 @@
 import { CSSProperties, ReactNode, forwardRef } from "react"
+import { useSelector } from "react-redux"
+import { 
+    useAppDispatch, removeAssembler, 
+    makeSelectRecipeByName, makeSelectAdjacentSupplyLines 
+} from "../../redux"
 import ItemIcon from "../ItemIcon"
-import { removeAssembler } from "../../redux/assemblerSlice"
-import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks"
 import type { Assembler } from "../../types"
-import { makeSelectRecipeByName } from "../../redux/recipeSlice"
-import { makeSelectAdjacentSupplyLines } from "../../redux/supplySlice"
 
 type AssemblerProps = {
     assembler: Assembler
@@ -15,8 +16,8 @@ type AssemblerProps = {
 
 const AssemblerCard = forwardRef<HTMLDivElement, AssemblerProps>(
     ({ assembler, children, className = "", style = {} }, ref) => {
-        const recipe = useAppSelector(makeSelectRecipeByName(assembler.recipeName))
-        const supplyList = useAppSelector(makeSelectAdjacentSupplyLines(assembler.columnId))
+        const recipe = useSelector(makeSelectRecipeByName(assembler.recipeName))
+        const supplyList = useSelector(makeSelectAdjacentSupplyLines(assembler.columnId))
 
         const dispatch = useAppDispatch()
 

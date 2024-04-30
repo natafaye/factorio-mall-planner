@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
-import { assemblerReducer } from "./assemblerSlice"
+import { mallReducer } from "./mallSlice"
 import { recipeReducer } from "./recipeSlice"
-import { supplyReducer } from "./supplySlice"
 
 export const store = configureStore({
     reducer: {
-        assemblers: assemblerReducer,
-        recipes: recipeReducer,
-        supplyLines: supplyReducer
+        mall: mallReducer,
+        recipes: recipeReducer
     }
 })
 

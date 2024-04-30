@@ -3,23 +3,29 @@ import {
     DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, KeyboardSensor,
     MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors
 } from "@dnd-kit/core";
-import { useAppDispatch, useAppSelector } from "../../redux/reduxHooks";
-import { Columns, moveAssembler, replaceColumns } from "../../redux/assemblerSlice";
-import { useMultipleContainersCollisionDetection } from "../../utilities/useMultipleContainersCollisionDetection";
-import { multipleContainersKeyboardCoordinateGetter } from "../../utilities/multipleContainersKeyboardCoordinates";
-import { findColumnId } from "../../utilities/findColumnId";
-import AssemblerCard from "../AssemblerColumn/AssemblerCard";
-import DragHandle from "../AssemblerColumn/DragHandle";
+import { useSelector } from "react-redux";
+import { 
+    useAppDispatch, makeSelectAssemblerById, moveAssembler, replaceAllColumns 
+} from "../../redux";
+import { AssemblerCard } from "../AssemblerColumn";
+import DragHandle from "../DragHandle/DragHandle";
+import { useMultipleContainersCollisionDetection } from "./useMultipleContainersCollisionDetection";
+import { multipleContainersKeyboardCoordinateGetter } from "./multipleContainersKeyboardCoordinates";
+import { findColumnId } from "./findColumnId";
+import { ColumnsToAssemblers } from "../../types";
 
-export default function SortingContext({ children, data }: { children: ReactNode, data: Columns }) {
-    const [clonedData, setClonedData] = useState<Columns | null>(null)
+export default function SortingContext({ children, data }: { children: ReactNode, data: ColumnsToAssemblers }) {
+    // State
+    const [clonedData, setClonedData] = useState<ColumnsToAssemblers | null>(null)
     const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
-    const activeItem = useAppSelector(state => activeId ? state.assemblers.assemblerList[activeId] : null)
 
+    // Redux
+    const activeItem = useSelector(makeSelectAssemblerById(activeId as string))
+    const dispatch = useAppDispatch()
+
+    // Refs
     const lastOverId = useRef<UniqueIdentifier | null>(null)
     const recentlyMovedToNewContainer = useRef(false)
-
-    const dispatch = useAppDispatch()
 
     useEffect(() => {
         requestAnimationFrame(() => {
@@ -38,7 +44,7 @@ export default function SortingContext({ children, data }: { children: ReactNode
     )
 
     const handleDragCancel = () => {
-        if (clonedData) dispatch(replaceColumns(clonedData))
+        if (clonedData) dispatch(replaceAllColumns(clonedData))
         setActiveId(null)
         setClonedData(null)
     };

@@ -1,11 +1,11 @@
 import { CollisionDetection, UniqueIdentifier, closestCenter, 
     getFirstCollision, pointerWithin, rectIntersection } from "@dnd-kit/core";
 import { useCallback } from "react";
-import { Columns } from "../redux/assemblerSlice";
+import { ColumnsToAssemblers } from "../../types";
 
 type UseMultipleContainersCollisionDetectionProps = {
     activeId: UniqueIdentifier | null
-    data: Columns
+    data: ColumnsToAssemblers
     lastOverId: React.MutableRefObject<UniqueIdentifier | null>
     recentlyMovedToNewContainer: React.MutableRefObject<boolean>
 }

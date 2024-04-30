@@ -12,3 +12,5 @@ export type Assembler = {
     recipeName: string
     columnId: string
 }
+
+export type ColumnsToAssemblers = Record<string, Array<string>>

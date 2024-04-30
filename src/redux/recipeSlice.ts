@@ -1,5 +1,5 @@
 import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
-import { defaultRecipes } from '../utilities/defaultRecipes'
+import { defaultRecipes } from './defaultRecipes'
 import type { Recipe } from '../types'
 import { RootState } from './store'
 
@@ -36,4 +36,23 @@ export const makeSelectRecipesInGroup = (selectedGroup: string) =>
 export const makeSelectRecipeByName = (recipeName: string) =>
   (state: RootState) => state.recipes.recipeList.find(
     r => r.name === recipeName
+  )
+
+
+const fuzzyIncludes = (string: string, search: string) => string
+  .replace(/[- ]/g, "")
+  .includes(search.replace(/[- ]/g, ""))
+
+const ingredientLabel = /^(i|ingredient): */
+
+export const makeSelectRecipesBySearch = (searchTerm: string) =>
+  createSelector(
+    [selectAllRecipes],
+    (allRecipes) => !searchTerm ? [] : allRecipes.filter(r =>
+      fuzzyIncludes(r.name, searchTerm)
+      || (
+        searchTerm.match(ingredientLabel)
+        && r.ingredients.some(i => fuzzyIncludes(i.name, searchTerm.replace(ingredientLabel, "")))
+      )
+    )
   )

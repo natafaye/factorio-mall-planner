@@ -1,16 +1,17 @@
-import AssemblerColumn from "./components/AssemblerColumn/AssemblerColumn";
-import SupplyColumn from "./components/SupplyColumn/SupplyColumn";
-import SortingContext from "./components/SortingContext/SortingContext";
-import React, { useMemo } from "react";
-import { useAppSelector } from "./redux/reduxHooks";
-import RecipeListLoader from "./components/RecipeListLoader/RecipeListLoader";
+import React from "react"
+import { useSelector } from "react-redux"
+import AssemblerColumn from "./components/AssemblerColumn"
+import SupplyColumn from "./components/SupplyColumn"
+import SortingContext from "./components/SortingContext"
+import RecipeListLoader from "./components/RecipeListLoader"
+import { selectColumnOrder, selectColumnToAssemblers } from "./redux"
 
 export default function App() {
-  const columns = useAppSelector(state => state.assemblers.columns)
-  const columnIds = useMemo(() => Object.keys(columns), [columns])
+  const columnIds = useSelector(selectColumnOrder)
+  const columnsToAssemblers = useSelector(selectColumnToAssemblers)
 
   return (
-    <SortingContext data={columns}>
+    <SortingContext data={columnsToAssemblers}>
       <div className="flex flex-col min-h-screen">
         <div className="bg-stone-900">
           <RecipeListLoader/>

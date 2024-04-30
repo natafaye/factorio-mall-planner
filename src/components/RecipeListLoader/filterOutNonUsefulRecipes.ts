@@ -1,5 +1,5 @@
-import type { Recipe } from "../types";
-import { getBaseName } from "./getBaseName";
+import type { Recipe } from "../../types";
+import { getBaseName } from "../../shared";
 
 export const filterOutNonUsefulRecipes = (recipeList: Array<Recipe>) => {
     return recipeList.filter(recipe =>

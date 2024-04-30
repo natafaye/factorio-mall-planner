@@ -1,11 +1,14 @@
-import AssemblerCard from "./AssemblerCard"
-import DragHandle from "./DragHandle"
 import { CSS } from "@dnd-kit/utilities"
 import { useSortable } from "@dnd-kit/sortable"
+import AssemblerCard from "./AssemblerCard"
+import DragHandle from "../DragHandle"
 import type { Assembler } from "../../types"
 
 export default function SortableAssemblerCard({ assembler }: { assembler: Assembler }) {
-    const { attributes, listeners, setNodeRef, setActivatorNodeRef, isDragging, transform, transition } = useSortable({
+    const { 
+        attributes, listeners, isDragging, transform, transition,
+        setNodeRef, setActivatorNodeRef, 
+    } = useSortable({
         id: assembler.id,
         data: {
             columnId: assembler.columnId

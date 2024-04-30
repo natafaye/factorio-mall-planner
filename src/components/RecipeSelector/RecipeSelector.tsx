@@ -1,10 +1,12 @@
-import { useState } from "react";
-import Button from "../_ui_components/Button";
-import styles from "./RecipeSelector.module.css"
-import ItemIcon from "../ItemIcon";
+import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { makeSelectRecipesInGroup, selectGroups } from "../../redux";
 import type { Recipe } from "../../types";
-import { makeSelectRecipesInGroup, selectGroups } from "../../redux/recipeSlice";
-import { useAppSelector } from "../../redux/reduxHooks";
+import { Button } from "../UI";
+import ItemIcon from "../ItemIcon";
+import styles from "./RecipeSelector.module.css"
+import { useClickOutside } from "./useClickOutside";
+import RecipeSearchPanel from "./RecipeSearchPanel";
 
 type RecipeSelectorProps = {
     onChange: (newValue: string) => void
@@ -14,10 +16,15 @@ type RecipeSelectorProps = {
 export default function RecipeSelector({ onChange, children }: RecipeSelectorProps) {
     const [showMenu, setShowMenu] = useState(false)
 
-    const groups = useAppSelector(selectGroups)
+    const groups = useSelector(selectGroups)
     const [selectedGroup, setSelectedGroup] = useState<string>(groups[0])
-    
-    const recipesInGroup = useAppSelector(makeSelectRecipesInGroup(selectedGroup))
+
+    const recipesInGroup = useSelector(makeSelectRecipesInGroup(selectedGroup))
+
+    const divRef = useRef(null)
+    useClickOutside(divRef, () => {
+        setShowMenu(false)
+    })
 
     const handleItemClick = (recipe: Recipe) => {
         onChange(recipe.name)
@@ -25,34 +32,45 @@ export default function RecipeSelector({ onChange, children }: RecipeSelectorPro
     }
 
     return (
-        <div className="relative">
-            <Button onClick={() => setShowMenu(!showMenu)}>{ children }</Button>
+        <div className="relative" ref={divRef}>
+            <Button onClick={() => setShowMenu(!showMenu)}>{children}</Button>
             {showMenu && (
-                <div className="absolute bg-stone-700 shadow-sm -mt-3 ms-3 p-4 rounded-md">
+                <div className="absolute bg-stone-700 shadow-xl -mt-3 ms-3 p-4 rounded-md">
                     <div className="flex">
-                        {groups.map(groupName => (
-                            <button 
+                        {["search", ...groups].map(groupName => (
+                            <button
                                 key={groupName}
                                 onClick={() => setSelectedGroup(groupName)}
-                                className={`p-3 pb-2 ${ 
-                                    selectedGroup === groupName ? "bg-[orange]" : "bg-stone-600"
-                                }`}
+                                className={`p-3 pb-2 ${selectedGroup === groupName ? "bg-[orange]" : "bg-stone-600"
+                                    }`}
                             >
-                                <ItemIcon className={styles.groupIcon} name={groupName}/>
+                                <ItemIcon className={styles.groupIcon} name={groupName} />
                             </button>
                         ))}
 
                     </div>
                     <div className="mt-2">
-                        {recipesInGroup.map(r => (
-                            <button 
-                                key={r.name}
-                                onClick={() => handleItemClick(r)}
-                                className="p-1 pb-0 hover:bg-stone-600"
-                            >
-                                <ItemIcon key={r.name} name={r.name}/>
-                            </button>
-                        ))}
+                        {selectedGroup === "search" ?
+                            <RecipeSearchPanel>
+                                {r => (
+                                    <button
+                                        key={r.name}
+                                        onClick={() => handleItemClick(r)}
+                                        className="p-1 pb-0 hover:bg-stone-600"
+                                    >
+                                        <ItemIcon key={r.name} name={r.name} />
+                                    </button>
+                                )}
+                            </RecipeSearchPanel>
+                            : recipesInGroup.map(r => (
+                                <button
+                                    key={r.name}
+                                    onClick={() => handleItemClick(r)}
+                                    className="p-1 pb-0 hover:bg-stone-600"
+                                >
+                                    <ItemIcon key={r.name} name={r.name} />
+                                </button>
+                            ))}
                     </div>
                 </div>
             )}
