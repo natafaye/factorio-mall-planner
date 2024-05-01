@@ -7,13 +7,15 @@ import ItemIcon from "../ItemIcon";
 import styles from "./RecipeSelector.module.css"
 import { useClickOutside } from "./useClickOutside";
 import RecipeSearchPanel from "./RecipeSearchPanel";
+import classNames from "classnames";
 
 type RecipeSelectorProps = {
     onChange: (newValue: string) => void
+    className?: string
     children: React.ReactNode
 }
 
-export default function RecipeSelector({ onChange, children }: RecipeSelectorProps) {
+export default function RecipeSelector({ onChange, className, children }: RecipeSelectorProps) {
     const [showMenu, setShowMenu] = useState(false)
 
     const groups = useSelector(selectGroups)
@@ -32,17 +34,21 @@ export default function RecipeSelector({ onChange, children }: RecipeSelectorPro
     }
 
     return (
-        <div className="relative" ref={divRef}>
-            <Button onClick={() => setShowMenu(!showMenu)}>{children}</Button>
+        <div className={classNames("relative", className)} ref={divRef}>
+            <Button onClick={() => setShowMenu(!showMenu)} className="flex-grow">
+                {children}
+            </Button>
             {showMenu && (
-                <div className="absolute bg-stone-700 shadow-xl -mt-3 ms-3 p-4 rounded-md">
+                <div className="absolute bg-stone-700 shadow-xl p-4 -mt-2 rounded-md z-10">
                     <div className="flex">
                         {["search", ...groups].map(groupName => (
                             <button
                                 key={groupName}
                                 onClick={() => setSelectedGroup(groupName)}
-                                className={`p-3 pb-2 ${selectedGroup === groupName ? "bg-[orange]" : "bg-stone-600"
-                                    }`}
+                                className={classNames(
+                                    "p-3 pb-2",
+                                    selectedGroup === groupName ? "bg-[orange]" : "bg-stone-600"
+                                )}
                             >
                                 <ItemIcon className={styles.groupIcon} name={groupName} />
                             </button>

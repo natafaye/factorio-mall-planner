@@ -6,7 +6,6 @@ import { RootState } from './store'
 /***** Initial State *****/
 
 const starterId1 = uuid()
-const starterId2 = uuid()
 
 const initialState: {
     columnOrder: string[]
@@ -14,13 +13,12 @@ const initialState: {
     assemblers: Record<string, Assembler>
     supplyLines: Array<string[]>
 } = {
-    columnOrder: [starterId1, starterId2],
+    columnOrder: [starterId1],
     columnToAssemblers: {
         [starterId1]: [],
-        [starterId2]: []
     },
     assemblers: {},
-    supplyLines: [[], [], []],
+    supplyLines: [[], []],
 }
 
 
@@ -47,12 +45,24 @@ export const mallSlice = createSlice({
             state.columnToAssemblers[columnId].splice(index, 1)
         },
         moveAssembler: (state, action: PayloadAction<{
-            oldColumnId: string, newColumnId: string, newIndex: number, assemblerId: string
+            oldColumnId: string, newColumnId?: string, newIndex: number, assemblerId: string
         }>) => {
-            const { oldColumnId, newColumnId, newIndex, assemblerId } = action.payload
+            const { oldColumnId, newIndex, assemblerId } = action.payload
+            let { newColumnId } = action.payload
 
             const oldIndex = state.columnToAssemblers[oldColumnId].indexOf(assemblerId)
             state.columnToAssemblers[oldColumnId].splice(oldIndex, 1)
+
+            // If there wasn't a new column specified, create a column
+            // and move the assembler to the newly created column
+            if(!newColumnId) {
+                // Create the column
+                newColumnId = uuid()
+                state.columnToAssemblers[newColumnId] = []
+                state.columnOrder.push(newColumnId)
+                // Create the supply line
+                state.supplyLines.push([])
+            }
 
             state.columnToAssemblers[newColumnId] = [
                 ...state.columnToAssemblers[newColumnId].slice(0, newIndex),
@@ -69,6 +79,29 @@ export const mallSlice = createSlice({
         // Columns
         replaceAllColumns: (state, action: PayloadAction<ColumnsToAssemblers>) => {
             state.columnToAssemblers = action.payload
+        },
+        addColumn: (state) => {
+            const newColumnId = uuid()
+            state.columnToAssemblers[newColumnId] = []
+            state.columnOrder.push(newColumnId)
+            state.supplyLines.push([])
+        },
+        removeColumn: (state, action: PayloadAction<string>) => {
+            const columnIndex = state.columnOrder.indexOf(action.payload)
+            // Remove contained assemblers
+            state.columnToAssemblers[action.payload].forEach(
+                assemblerId => delete state.assemblers[assemblerId]
+            )
+            state.columnToAssemblers[action.payload] = []
+            // If this is the only column left, stop there
+            if(state.columnOrder.length === 1) return
+            // Merge surrounding supply lines
+            const lineAfter = state.supplyLines[columnIndex + 1]
+            state.supplyLines[columnIndex].push(...lineAfter)
+            state.supplyLines.splice(columnIndex + 1, 1)
+            // Remove column
+            delete state.columnToAssemblers[action.payload]
+            state.columnOrder.splice(columnIndex, 1)
         },
 
         // Supply Lines
@@ -88,8 +121,8 @@ export const mallSlice = createSlice({
 export const mallReducer = mallSlice.reducer
 export const { 
     addAssembler, removeAssembler, moveAssembler, 
-    replaceAllColumns, 
-    addSupply, removeSupply 
+    replaceAllColumns, addColumn, removeColumn,
+    addSupply, removeSupply,
 } = mallSlice.actions
 
 

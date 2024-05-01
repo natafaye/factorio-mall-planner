@@ -5,6 +5,8 @@ import SupplyColumn from "./components/SupplyColumn"
 import SortingContext from "./components/SortingContext"
 import RecipeListLoader from "./components/RecipeListLoader"
 import { selectColumnOrder, selectColumnToAssemblers } from "./redux"
+import { Button } from "./components/UI"
+import NewColumnButton from "./NewColumnButton"
 
 export default function App() {
   const columnIds = useSelector(selectColumnOrder)
@@ -24,6 +26,7 @@ export default function App() {
               <SupplyColumn index={index + 1} />
             </React.Fragment>
           ))}
+          <NewColumnButton/>
         </div>
       </div>
     </SortingContext>

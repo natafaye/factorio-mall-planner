@@ -14,6 +14,8 @@ import { multipleContainersKeyboardCoordinateGetter } from "./multipleContainers
 import { findColumnId } from "./findColumnId";
 import { ColumnsToAssemblers } from "../../types";
 
+export const NEW_PREFIX = "NEW"
+
 export default function SortingContext({ children, data }: { children: ReactNode, data: ColumnsToAssemblers }) {
     // State
     const [clonedData, setClonedData] = useState<ColumnsToAssemblers | null>(null)
@@ -57,7 +59,7 @@ export default function SortingContext({ children, data }: { children: ReactNode
     const handleDragOver = ({ active, over }: DragOverEvent) => {
         const overId = over?.id;
 
-        if (overId == null) return
+        if (!overId) return
 
         const overColumnId = findColumnId(overId.toString(), data);
         const activeColumnId = findColumnId(active.id.toString(), data);
@@ -98,6 +100,16 @@ export default function SortingContext({ children, data }: { children: ReactNode
         const activeColumnId = findColumnId(active.id.toString(), data)
 
         if (!activeColumnId || overId == null) {
+            setActiveId(null)
+            return
+        }
+
+        if(overId.toString().startsWith(NEW_PREFIX)) {
+            dispatch(moveAssembler({
+                oldColumnId: activeColumnId,
+                assemblerId: active.id.toString(),
+                newIndex: 0
+            }))
             setActiveId(null)
             return
         }

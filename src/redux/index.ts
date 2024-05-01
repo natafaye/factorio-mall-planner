@@ -10,6 +10,8 @@ export {
     removeAssembler, 
     moveAssembler, 
     replaceAllColumns, 
+    addColumn,
+    removeColumn,
     addSupply, 
     removeSupply 
 } from "./mallSlice"
