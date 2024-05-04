@@ -28,5 +28,9 @@ for a, b in pairs(game.item_prototypes) do
     item = '{ "name": "' .. b.name .. '", "order": "' .. b.order .. '", "subgroup": "' .. b.subgroup.order .. '", "group": "' .. b.group.name .. '" }'
     table.insert(listitems,item) 
 end
+for a, b in pairs(game.fluid_prototypes) do
+    item = '{ "name": "' .. b.name .. '", "order": "' .. b.order .. '", "subgroup": "' .. b.subgroup.order .. '", "group": "' .. b.group.name .. '" }'
+    table.insert(listitems,item) 
+end
 table.sort(listresources)
 game.write_file('recipes.json', '{ "recipes": [' .. table.concat(listresources, ',\r\n') .. '],\r\n\r\n"items": [' .. table.concat(listitems, ',\r\n') .. '] }')

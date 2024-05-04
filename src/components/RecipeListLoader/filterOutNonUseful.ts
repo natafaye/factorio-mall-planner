@@ -12,7 +12,9 @@ const NON_USEFUL = [
     "se-spaceship-ion-engine-burn", "se-spaceship-rocket-engine-burn",
     "kr-fusion", "se-gate-platform", "se-space-probe-rocket-deploy",
     "se-empty-barrel-reprocessing", "se-scrap-decontamination", "se-scrap-recycling",
-    "se-matter-fusion-dirty"
+    "se-matter-fusion-dirty", "hcraft-recipe", "mcraft-recipe", "se-iridium-piledriver",
+    "se-train-gui-targeter", "coin", "kr-creep", "se-space-probe-rocket-deployed",
+    "fluid-unknown", "se-decompressing-steam"
 ]
 
 export type RecipeOrItem = {

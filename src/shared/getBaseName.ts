@@ -13,7 +13,7 @@ const SUFFIXES = [
     "-decontamination", "-from-vitamelange", "-crude-oil", "-with-ammonia", 
     "-with-hydrogen-chloride", "-with-water", "-plus", "-growing",
     "-from-atmosphere", "-with-nutrients", "-from-solid-fuel", "-chemical",
-    "-multispectral-1", "-multispectral-2", "-multispectral-3",
+    "-multispectral-1", "-multispectral-2", "-multispectral-3", "-ir", "-ho"
 ]
 
 const cache = new Map<string, string>()
