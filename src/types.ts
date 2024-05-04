@@ -1,10 +1,18 @@
+
 export type Recipe = {
     name: string
-    time: number
     group: string
     subgroup: string
+    time: number
     products: Array<{ name: string, amount: number }>
     ingredients: Array<{ name: string, amount: number }>
+}
+
+export type Item = {
+    name: string
+    group: string
+    subgroup: string
+    order: string
 }
 
 export type Assembler = {

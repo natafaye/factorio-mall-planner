@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useSelector } from "react-redux"
 import { addSupply, makeSelectSupplyLineByIndex, removeSupply, useAppDispatch } from "../../redux"
 import ItemIcon from "../ItemIcon"
-import RecipeSelector from "../RecipeSelector"
+import RecipeSelector, { ItemSelector } from "../RecipeSelector"
 import { faAngleDown, faPlus } from "@fortawesome/free-solid-svg-icons"
 
 export default function SupplyColumn({ index }: { index: number }) {
@@ -12,14 +12,14 @@ export default function SupplyColumn({ index }: { index: number }) {
 
     return (
         <div className="flex flex-col items-center border border-1 rounded-md border-stone-700 pt-2 min-w-32">
-            <RecipeSelector 
+            <ItemSelector
                 onChange={(name) => dispatch(addSupply({ name, index }))}
             >
                 <span className="inline-flex items-center gap-2">
                     <FontAwesomeIcon icon={faPlus}/>
                     <ItemIcon name="transport-belt"/>
                 </span>
-            </RecipeSelector>
+            </ItemSelector>
             <div className="flex gap-2 p-2">
                 {beltsInColumn.map(item => (
                     <div key={item} className="bg-stone-600 flex flex-col items-center p-1">

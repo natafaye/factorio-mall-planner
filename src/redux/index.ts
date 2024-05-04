@@ -33,7 +33,9 @@ export {
 } from "./mallSlice"
 
 export { 
-    selectGroups,
+    selectItemGroups,
+    makeSelectItemsInGroup,
+    selectRecipeGroups,
     makeSelectRecipesInGroup, 
     makeSelectRecipeByName,
     makeSelectRecipesBySearch,

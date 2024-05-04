@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { makeSelectRecipesInGroup, selectRecipeGroups } from "../../redux";
-import type { Recipe } from "../../types";
+import { makeSelectItemsInGroup, selectItemGroups } from "../../redux";
+import type { Item } from "../../types";
 import { Button } from "../UI";
 import ItemIcon from "../ItemIcon";
 import styles from "./RecipeSelector.module.css"
@@ -9,27 +9,27 @@ import { useClickOutside } from "./useClickOutside";
 import RecipeSearchPanel from "./RecipeSearchPanel";
 import classNames from "classnames";
 
-type RecipeSelectorProps = {
+type ItemSelectorProps = {
     onChange: (newValue: string) => void
     className?: string
     children: React.ReactNode
 }
 
-export default function RecipeSelector({ onChange, className, children }: RecipeSelectorProps) {
+export function ItemSelector({ onChange, className, children }: ItemSelectorProps) {
     const [showMenu, setShowMenu] = useState(false)
 
-    const groups = useSelector(selectRecipeGroups)
+    const groups = useSelector(selectItemGroups)
     const [selectedGroup, setSelectedGroup] = useState<string>(groups[0])
 
-    const recipesInGroup = useSelector(makeSelectRecipesInGroup(selectedGroup))
+    const itemsInGroup = useSelector(makeSelectItemsInGroup(selectedGroup))
 
     const divRef = useRef(null)
     useClickOutside(divRef, () => {
         setShowMenu(false)
     })
 
-    const handleItemClick = (recipe: Recipe) => {
-        onChange(recipe.name)
+    const handleItemClick = (item: Item) => {
+        onChange(item.name)
         setShowMenu(false)
     }
 
@@ -57,18 +57,19 @@ export default function RecipeSelector({ onChange, className, children }: Recipe
                     </div>
                     <div className="mt-2">
                         {selectedGroup === "search" ?
-                            <RecipeSearchPanel>
-                                {r => (
-                                    <button
-                                        key={r.name}
-                                        onClick={() => handleItemClick(r)}
-                                        className="p-1 pb-0 hover:bg-stone-600"
-                                    >
-                                        <ItemIcon key={r.name} name={r.name} />
-                                    </button>
-                                )}
-                            </RecipeSearchPanel>
-                            : recipesInGroup.map(r => (
+                            // <RecipeSearchPanel>
+                            //     {i => (
+                            //         <button
+                            //             key={r.name}
+                            //             onClick={() => handleItemClick(i)}
+                            //             className="p-1 pb-0 hover:bg-stone-600"
+                            //         >
+                            //             <ItemIcon key={r.name} name={r.name} />
+                            //         </button>
+                            //     )}
+                            // </RecipeSearchPanel>
+                            <div/>
+                            : itemsInGroup.map(r => (
                                 <button
                                     key={r.name}
                                     onClick={() => handleItemClick(r)}

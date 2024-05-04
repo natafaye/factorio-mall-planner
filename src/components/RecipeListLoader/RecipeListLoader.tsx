@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loadRecipes } from "../../redux";
 import { Button, FileInput } from "../UI";
-import { filterOutNonUsefulRecipes } from "./filterOutNonUsefulRecipes";
+import { filterOutNonUseful } from "./filterOutNonUseful";
+import type { Item, Recipe } from "../../types";
 
 export default function RecipeListLoader() {
     const [file, setFile] = useState<File | null>(null)
@@ -26,11 +27,17 @@ export default function RecipeListLoader() {
             fileReader.readAsText(file, "UTF-8")
             fileReader.onload = (e) => {
                 if (e.target && typeof e.target.result === "string") {
-                    const loadedRecipes = JSON.parse(e.target.result)
-                    const usefulRecipes = filterOutNonUsefulRecipes(loadedRecipes)
-                    dispatch(loadRecipes(usefulRecipes))
+                    const { recipes, items } = JSON.parse(e.target.result)
+                    const usefulRecipes = filterOutNonUseful<Recipe>(recipes)
+                    const usefulItems = filterOutNonUseful<Item>(items)
+                    dispatch(loadRecipes({ 
+                        recipes: usefulRecipes, 
+                        items: usefulItems 
+                    }))
                     setStatusMessage(
-                        `Loaded ${usefulRecipes.length} recipes, filtered out ${loadedRecipes.length - usefulRecipes.length}`
+                        `Loaded ${usefulRecipes.length} recipes and ${usefulItems.length
+                        } items, filtered out ${recipes.length - usefulRecipes.length
+                        } recipes and ${items.length - usefulItems.length} items`
                     )
                     setIsError(false)
                 } else {
