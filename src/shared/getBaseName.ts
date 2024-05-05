@@ -1,3 +1,5 @@
+import type { SettingsData } from "../components/Settings"
+import { ICON_ALTERNATES } from "./iconAlternates"
 
 const PREFIXES = [
     "kr-", "vc-", "se-", "Arci-", "rare-metal-", "aai-", 
@@ -17,11 +19,14 @@ const SUFFIXES = [
 ]
 
 const cache = new Map<string, string>()
+const previousSettings = null
 
-export const getBaseName = (name: string) => {
+export const getBaseName = (name: string, settings?: SettingsData) => {
     // Check the cache
-    if(cache.has(name))
-        return cache.get(name) as string
+    const cacheName = optionallyAddAlternateIconSuffix(name, settings)
+    if(previousSettings === settings && cache.has(cacheName))
+        return cache.get(cacheName) as string
+
     let baseName = name
     
     // Strip off all prefixes
@@ -38,8 +43,25 @@ export const getBaseName = (name: string) => {
         suffix = SUFFIXES.find(s => baseName.endsWith(s))
     }
 
+    baseName = optionallyAddAlternateIconSuffix(baseName, settings)
+
+    console.log(baseName)
+
     // Save to cache
     cache.set(name, baseName)
 
     return baseName
+}
+
+const optionallyAddAlternateIconSuffix = (name: string, settings?: SettingsData) => {
+    // SE trumps KR which trumps AAI
+    console.log(settings)
+    console.log(ICON_ALTERNATES.aai.includes(name))
+    if(settings?.showSeIcons && ICON_ALTERNATES.se.includes(name))
+        return name + "-se"
+    else if(settings?.showKrIcons && ICON_ALTERNATES.kr.includes(name))
+        return name + "-kr"
+    else if(settings?.showAaiIcons && ICON_ALTERNATES.aai.includes(name))
+        return name + "-aai"
+    return name
 }

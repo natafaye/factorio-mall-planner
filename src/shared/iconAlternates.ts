@@ -40,5 +40,10 @@ export const ICON_ALTERNATES = {
         "steel-chest",
         "engine-unit",
         "electric-engine-unit",
+        "logistic-chest-passive-provider",
+        "logistic-chest-storage",
+        "logistic-chest-buffer",
+        "logistic-chest-active-provider",
+        "logistic-chest-requester"
     ]
 }
