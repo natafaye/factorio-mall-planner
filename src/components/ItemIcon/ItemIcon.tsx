@@ -16,9 +16,6 @@ export default function ItemImage({
     defaultSize: { width: 120, height: 64 }
   })
 
-  
-  console.log("special", getBaseName("steel-chest", settings))
-
   return (
     <span
       className={`${styles[`icon${width}x${height}`]} ${className} inline-block`}

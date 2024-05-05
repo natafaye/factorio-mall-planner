@@ -45,8 +45,6 @@ export const getBaseName = (name: string, settings?: SettingsData) => {
 
     baseName = optionallyAddAlternateIconSuffix(baseName, settings)
 
-    console.log(baseName)
-
     // Save to cache
     cache.set(name, baseName)
 
@@ -55,8 +53,6 @@ export const getBaseName = (name: string, settings?: SettingsData) => {
 
 const optionallyAddAlternateIconSuffix = (name: string, settings?: SettingsData) => {
     // SE trumps KR which trumps AAI
-    console.log(settings)
-    console.log(ICON_ALTERNATES.aai.includes(name))
     if(settings?.showSeIcons && ICON_ALTERNATES.se.includes(name))
         return name + "-se"
     else if(settings?.showKrIcons && ICON_ALTERNATES.kr.includes(name))
