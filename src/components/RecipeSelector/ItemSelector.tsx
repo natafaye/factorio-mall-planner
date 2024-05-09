@@ -6,7 +6,6 @@ import { Button } from "../UI";
 import ItemIcon from "../ItemIcon";
 import styles from "./RecipeSelector.module.css"
 import { useClickOutside } from "./useClickOutside";
-import RecipeSearchPanel from "./RecipeSearchPanel";
 import classNames from "classnames";
 
 type ItemSelectorProps = {
