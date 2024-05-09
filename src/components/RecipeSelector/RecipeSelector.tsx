@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { makeSelectRecipesInGroup, selectRecipeGroups } from "../../redux";
+import { useSelectRecipesInGroup, useSelectRecipeGroups } from "../../redux";
 import type { Recipe } from "../../types";
 import { Button } from "../UI";
 import ItemIcon from "../ItemIcon";
@@ -18,10 +17,9 @@ type RecipeSelectorProps = {
 export default function RecipeSelector({ onChange, className, children }: RecipeSelectorProps) {
     const [showMenu, setShowMenu] = useState(false)
 
-    const groups = useSelector(selectRecipeGroups)
+    const groups = useSelectRecipeGroups()
     const [selectedGroup, setSelectedGroup] = useState<string>(groups[0])
-
-    const recipesInGroup = useSelector(makeSelectRecipesInGroup(selectedGroup))
+    const recipesInGroup = useSelectRecipesInGroup(selectedGroup)
 
     const divRef = useRef(null)
     useClickOutside(divRef, () => {

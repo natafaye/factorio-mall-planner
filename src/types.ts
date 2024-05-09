@@ -22,3 +22,13 @@ export type Assembler = {
 }
 
 export type ColumnsToAssemblers = Record<string, Array<string>>
+
+export type AssemblerFullData = Assembler & {
+    recipe: undefined | Omit<Recipe, "ingredients"> & {
+        ingredients: undefined | Array<{ 
+            name: string, 
+            amount: number, 
+            satisfied: boolean 
+        }>
+    }
+}

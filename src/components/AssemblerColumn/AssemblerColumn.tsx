@@ -1,11 +1,11 @@
 import { useDroppable } from "@dnd-kit/core"
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable"
-import { useSelector } from "react-redux"
 import classNames from "classnames"
 import {
     useAppDispatch, addAssembler,
-    makeSelectAssemblersInColumn, makeSelectColumnById,
-    removeColumn
+    removeColumn,
+    useSelectAssemblersInColumn,
+    useSelectColumnById
 } from "../../redux"
 import RecipeSelector from "../RecipeSelector"
 import SortableAssemblerCard from "./SortableAssemblerCard"
@@ -20,8 +20,8 @@ type AssemblerColumnProps = {
 }
 
 export default function AssemblerColumn({ columnId, className = "" }: AssemblerColumnProps) {
-    const assemblerIdsInColumn = useSelector(makeSelectColumnById(columnId))
-    const assemblersInColumn = useSelector(makeSelectAssemblersInColumn(columnId))
+    const assemblerIdsInColumn = useSelectColumnById(columnId)
+    const assemblersInColumn = useSelectAssemblersInColumn(columnId)
 
     const dispatch = useAppDispatch()
 
@@ -57,6 +57,9 @@ export default function AssemblerColumn({ columnId, className = "" }: AssemblerC
                     >
                         <FontAwesomeIcon icon={faTrash} />
                     </Button>
+                </div>
+                <div>
+                    
                 </div>
                 {assemblersInColumn.map(assembler => (
                     <SortableAssemblerCard key={assembler.id} assembler={assembler} />

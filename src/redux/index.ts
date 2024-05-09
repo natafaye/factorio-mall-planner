@@ -14,29 +14,30 @@ export {
     removeColumn,
     addSupply, 
     removeSupply 
-} from "./mallSlice"
+} from "./slices/mallSlice"
 
 export { 
     loadRecipes 
-} from "./recipeSlice"
+} from "./slices/recipeSlice"
+
+export { 
+    setSettings 
+} from "./slices/settingSlice"
 
 /**** Selectors ****/
 
 export {
-    selectColumnOrder, 
-    selectColumnToAssemblers,
-    makeSelectAssemblerById,
-    makeSelectColumnById, 
-    makeSelectAssemblersInColumn,
-    makeSelectSupplyLineByIndex,
-    makeSelectAdjacentSupplyLines,
-} from "./mallSlice"
-
-export { 
-    selectItemGroups,
-    makeSelectItemsInGroup,
-    selectRecipeGroups,
-    makeSelectRecipesInGroup, 
-    makeSelectRecipeByName,
-    makeSelectRecipesBySearch,
-} from "./recipeSlice"
+    useSelectSupplyLineByIndex,
+    useSelectSettings,
+    useSelectColumnById,
+    useSelectColumnOrder,
+    useSelectAssemblerById,
+    useSelectColumnToAssemblers,
+    useSelectAssemblersInColumn,
+    useSelectItemGroups,
+    useSelectItemsInGroup,
+    useSelectRecipeGroups,
+    useSelectRecipesInGroup,
+    useSelectRecipesBySearch,
+    useSelectItemsBySearch,
+} from "./selectors"

@@ -3,9 +3,8 @@ import {
     DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, KeyboardSensor,
     MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors
 } from "@dnd-kit/core";
-import { useSelector } from "react-redux";
 import { 
-    useAppDispatch, makeSelectAssemblerById, moveAssembler, replaceAllColumns 
+    useAppDispatch, useSelectAssemblerById, moveAssembler, replaceAllColumns 
 } from "../../redux";
 import { AssemblerCard } from "../AssemblerColumn";
 import DragHandle from "../DragHandle/DragHandle";
@@ -22,7 +21,7 @@ export default function SortingContext({ children, data }: { children: ReactNode
     const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
     // Redux
-    const activeItem = useSelector(makeSelectAssemblerById(activeId as string))
+    const activeItem = useSelectAssemblerById(activeId as string)
     const dispatch = useAppDispatch()
 
     // Refs

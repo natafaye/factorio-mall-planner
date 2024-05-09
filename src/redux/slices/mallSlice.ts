@@ -1,7 +1,6 @@
-import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { v4 as uuid } from "uuid"
-import type { Assembler, ColumnsToAssemblers } from '../types'
-import { RootState } from './store'
+import type { Assembler, ColumnsToAssemblers} from '../../types'
 
 /***** Initial State *****/
 
@@ -55,7 +54,7 @@ export const mallSlice = createSlice({
 
             // If there wasn't a new column specified, create a column
             // and move the assembler to the newly created column
-            if(!newColumnId) {
+            if (!newColumnId) {
                 // Create the column
                 newColumnId = uuid()
                 state.columnToAssemblers[newColumnId] = []
@@ -94,7 +93,7 @@ export const mallSlice = createSlice({
             )
             state.columnToAssemblers[action.payload] = []
             // If this is the only column left, stop there
-            if(state.columnOrder.length === 1) return
+            if (state.columnOrder.length === 1) return
             // Merge surrounding supply lines
             const lineAfter = state.supplyLines[columnIndex + 1]
             state.supplyLines[columnIndex].push(...lineAfter)
@@ -114,58 +113,13 @@ export const mallSlice = createSlice({
             const nameIndex = state.supplyLines[index].indexOf(name)
             state.supplyLines[index].splice(nameIndex, 1)
         }
-        
+
     },
 })
 
 export const mallReducer = mallSlice.reducer
-export const { 
-    addAssembler, removeAssembler, moveAssembler, 
+export const {
+    addAssembler, removeAssembler, moveAssembler,
     replaceAllColumns, addColumn, removeColumn,
     addSupply, removeSupply,
 } = mallSlice.actions
-
-
-/***** Selectors *****/
-
-// Basic selectors
-
-export const selectColumnOrder = (state: RootState) => state.mall.columnOrder
-
-export const selectColumnToAssemblers = (state: RootState) => state.mall.columnToAssemblers
-
-const selectAllAssemblers = (state: RootState) => state.mall.assemblers
-
-const selectAllSupplyLines = (state: RootState) => state.mall.supplyLines
-
-// Selector creators
-
-const makeSelectColumnIndex = (columnId: string) => 
-    (state: RootState) => state.mall.columnOrder.indexOf(columnId)
-
-export const makeSelectAssemblerById = (assemblerId: string | null) => 
-    (state: RootState) => assemblerId ? state.mall.assemblers[assemblerId] : undefined
-
-export const makeSelectColumnById = (columnId: string) =>
-    (state: RootState) => state.mall.columnToAssemblers[columnId]
-
-export const makeSelectSupplyLineByIndex = (index: number) => 
-    (state: RootState) => state.mall.supplyLines[index]
-
-export const makeSelectAssemblersInColumn = (columnId: string) =>
-    createSelector(
-        [
-            makeSelectColumnById(columnId),
-            selectAllAssemblers
-        ],
-        (column, allAssemblers) => column.map(id => allAssemblers[id])
-    )
-
-export const makeSelectAdjacentSupplyLines = (columnId: string) =>
-    createSelector(
-        [
-            selectAllSupplyLines,
-            makeSelectColumnIndex(columnId)
-        ],
-        (supplyLines, index) => [...supplyLines[index], ...supplyLines[index + 1]]
-    )

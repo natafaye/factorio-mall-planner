@@ -1,12 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useSelector } from "react-redux"
-import { addSupply, makeSelectSupplyLineByIndex, removeSupply, useAppDispatch } from "../../redux"
+import { addSupply, useSelectSupplyLineByIndex, removeSupply, useAppDispatch } from "../../redux"
 import ItemIcon from "../ItemIcon"
 import { ItemSelector } from "../RecipeSelector"
 import { faAngleDown, faPlus } from "@fortawesome/free-solid-svg-icons"
 
 export default function SupplyColumn({ index }: { index: number }) {
-    const beltsInColumn = useSelector(makeSelectSupplyLineByIndex(index))
+    const beltsInColumn = useSelectSupplyLineByIndex(index)
 
     const dispatch = useAppDispatch()
 

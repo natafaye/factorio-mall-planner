@@ -1,10 +1,9 @@
-import { useSetSettings, useSettings } from "./SettingsContext"
+import { setSettings, useAppDispatch, useSelectSettings } from "../../redux"
 
-type Props = {}
 
-export default function Settings({ }: Props) {
-    const settings = useSettings()
-    const setSettings = useSetSettings()
+export default function Settings() {
+    const settings = useSelectSettings()
+    const dispatch = useAppDispatch()
 
     return (
         <div className="flex gap-5 p-3">
@@ -13,7 +12,7 @@ export default function Settings({ }: Props) {
                     type="checkbox"
                     className="bg-stone-400"
                     checked={settings?.showAaiIcons}
-                    onChange={({ target }) => setSettings({ showAaiIcons: target.checked })}
+                    onChange={({ target }) => dispatch(setSettings({ showAaiIcons: target.checked }))}
                 />
                 AAI icons
             </label>

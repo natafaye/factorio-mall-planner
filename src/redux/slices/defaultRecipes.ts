@@ -1,4 +1,4 @@
-import type { Recipe } from "../types";
+import type { Recipe } from "../../types";
 
 export const defaultRecipes: Array<Recipe> = [
     { name: "accumulator", time: 10, subgroup: "b", group: "production", products: [{ name: "accumulator", amount: 1 }], ingredients: [{ name: "iron-plate", amount: 2 }, { name: "battery", amount: 5 }] },

@@ -1,13 +1,13 @@
 import { useMemo } from "react"
+import { useSelectSettings } from "../../redux"
 import { getBaseName } from "../../shared"
 import { useImage } from "./useImage"
 import styles from "./ItemIcon.module.css"
-import { useSettings } from "../Settings"
 
 export default function ItemImage({
   name, style, className = "", ...props
 }: { name: string } & React.HTMLAttributes<HTMLSpanElement>) {
-  const settings = useSettings()
+  const settings = useSelectSettings()
   const imageName = useMemo(() => getBaseName(name, settings), [name])
   const { width, height, path } = useImage({
     imageName: imageName,

@@ -1,20 +1,17 @@
 import React from "react"
-import { useSelector } from "react-redux"
+import { useSelectColumnToAssemblers, useSelectColumnOrder } from "./redux"
 import AssemblerColumn from "./components/AssemblerColumn"
 import SupplyColumn from "./components/SupplyColumn"
 import SortingContext from "./components/SortingContext"
 import RecipeListLoader from "./components/RecipeListLoader"
-import { selectColumnOrder, selectColumnToAssemblers } from "./redux"
+import Settings from "./components/Settings"
 import NewColumnButton from "./NewColumnButton"
-import Settings, { SettingsContext, useSettingsContextData } from "./components/Settings"
 
 export default function App() {
-  const settingsData = useSettingsContextData()
-  const columnIds = useSelector(selectColumnOrder)
-  const columnsToAssemblers = useSelector(selectColumnToAssemblers)
+  const columnIds = useSelectColumnOrder()
+  const columnsToAssemblers = useSelectColumnToAssemblers()
 
   return (
-    <SettingsContext.Provider value={settingsData}>
       <SortingContext data={columnsToAssemblers}>
         <div className="flex flex-col min-h-screen">
           <div className="bg-stone-900 flex">
@@ -33,6 +30,5 @@ export default function App() {
           </div>
         </div>
       </SortingContext>
-    </SettingsContext.Provider>
   )
 }
