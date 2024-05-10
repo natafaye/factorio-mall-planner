@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const cache = new Map<string, { width: number, height: number, path: string }>()
 
@@ -9,7 +9,7 @@ type UseImageProps = {
     defaultSize: { width: number, height: number }
 }
 
-export const useImage = ({imageName, fallbackName, folderPath}: UseImageProps) => {
+export const useImage = ({imageName, fallbackName, folderPath }: UseImageProps) => {
     // Initial state is the info from the cache, 
     // or the fallback (which will be overwritten if the image exists)
     const [imageDetails, setImageDetails] = useState(() => cache.get(imageName) || {
@@ -17,10 +17,12 @@ export const useImage = ({imageName, fallbackName, folderPath}: UseImageProps) =
         height: 64,
         path: folderPath + fallbackName + ".png"
     })
+
+    const previousImageName = useRef(imageName)
     
     useEffect(() => {
         // If this image is already in the cache, then the image details were already set
-        if(cache.has(imageName)) return
+        if(cache.has(imageName) && previousImageName.current === imageName) return
         // Load in the image to measure its size and make sure it exists
         const image = new Image()
         image.onload = () => {
@@ -31,6 +33,7 @@ export const useImage = ({imageName, fallbackName, folderPath}: UseImageProps) =
             }
             // Overwrite the image details with the loaded details and set the cache
             setImageDetails(loadedDetails)
+            previousImageName.current = imageName
             cache.set(imageName, loadedDetails)
         }
         // Set the image path to start the loading in

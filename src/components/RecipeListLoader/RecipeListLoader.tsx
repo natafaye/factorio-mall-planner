@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { loadRecipes } from "../../redux";
 import { Button, FileInput } from "../UI";
 import { filterOutNonUseful } from "./filterOutNonUseful";
-import type { Item, Recipe } from "../../types";
+import type { Item, Recipe } from "../../redux/types";
 
 export default function RecipeListLoader() {
     const [file, setFile] = useState<File | null>(null)

@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from "react"
 import { useSelectRecipesBySearch } from "../../redux"
-import { Recipe } from "../../types"
+import { Recipe } from "../../redux/types"
 import { Input } from "../UI"
 
 export default function RecipeSearchPanel({ children }: { children: (r: Recipe) => ReactNode }) {

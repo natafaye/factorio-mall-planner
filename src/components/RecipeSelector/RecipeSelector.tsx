@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useSelectRecipesInGroup, useSelectRecipeGroups } from "../../redux";
-import type { Recipe } from "../../types";
+import type { Recipe } from "../../redux/types";
 import { Button } from "../UI";
 import ItemIcon from "../ItemIcon";
 import styles from "./RecipeSelector.module.css"

@@ -3,6 +3,18 @@
 export { store } from "./store"
 export { useAppDispatch } from "./useAppDispatch"
 
+/**** Types ****/
+
+export type { 
+    Assembler, 
+    AssemblerFullData, 
+    Recipe, 
+    Item, 
+    ColumnsToAssemblers 
+} from "./types"
+
+export type { Settings } from "./slices/settingSlice"
+
 /**** Action Creators ****/
 
 export { 

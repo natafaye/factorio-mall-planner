@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { v4 as uuid } from "uuid"
-import type { Assembler, ColumnsToAssemblers} from '../../types'
+import type { Assembler, ColumnsToAssemblers} from '../types'
 
 /***** Initial State *****/
 

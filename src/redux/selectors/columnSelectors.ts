@@ -2,7 +2,7 @@ import { RootState } from "../store";
 import { createAppSelector } from "./createAppSelector";
 import { createAppSelectorHook } from "./createAppSelectorHook";
 import { selectAllAssemblers, selectAllRecipes, selectAllSupplyLines, selectColumnOrder } from "./basicSelectors";
-import { Assembler, AssemblerFullData, Recipe } from "../../types";
+import { Assembler, AssemblerFullData, Recipe } from "../types";
 
 // Basic Selectors
 const selectColumnById = (state: RootState, columnId: string) => state.mall.columnToAssemblers[columnId]

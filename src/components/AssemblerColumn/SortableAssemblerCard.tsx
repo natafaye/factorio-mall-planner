@@ -2,9 +2,9 @@ import { CSS } from "@dnd-kit/utilities"
 import { useSortable } from "@dnd-kit/sortable"
 import AssemblerCard from "./AssemblerCard"
 import DragHandle from "../DragHandle"
-import type { Assembler } from "../../types"
+import type { AssemblerFullData } from "../../redux/types"
 
-export default function SortableAssemblerCard({ assembler }: { assembler: Assembler }) {
+export default function SortableAssemblerCard({ assembler }: { assembler: AssemblerFullData }) {
     const { 
         attributes, listeners, isDragging, transform, transition,
         setNodeRef, setActivatorNodeRef, 

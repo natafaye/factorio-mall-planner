@@ -11,7 +11,7 @@ import DragHandle from "../DragHandle/DragHandle";
 import { useMultipleContainersCollisionDetection } from "./useMultipleContainersCollisionDetection";
 import { multipleContainersKeyboardCoordinateGetter } from "./multipleContainersKeyboardCoordinates";
 import { findColumnId } from "./findColumnId";
-import { ColumnsToAssemblers } from "../../types";
+import { ColumnsToAssemblers } from "../../redux/types";
 
 export const NEW_PREFIX = "NEW"
 

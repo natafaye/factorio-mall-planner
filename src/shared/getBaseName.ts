@@ -1,4 +1,4 @@
-import type { SettingsData } from "../components/Settings"
+import type { Settings } from "../redux"
 import { ICON_ALTERNATES } from "./iconAlternates"
 
 const PREFIXES = [
@@ -19,12 +19,11 @@ const SUFFIXES = [
 ]
 
 const cache = new Map<string, string>()
-const previousSettings = null
 
-export const getBaseName = (name: string, settings?: SettingsData) => {
+export const getBaseName = (name: string, settings?: Settings, invalidateCache?: boolean) => {
     // Check the cache
     const cacheName = optionallyAddAlternateIconSuffix(name, settings)
-    if(previousSettings === settings && cache.has(cacheName))
+    if(cache.has(cacheName) && !invalidateCache)
         return cache.get(cacheName) as string
 
     let baseName = name
@@ -51,7 +50,7 @@ export const getBaseName = (name: string, settings?: SettingsData) => {
     return baseName
 }
 
-const optionallyAddAlternateIconSuffix = (name: string, settings?: SettingsData) => {
+const optionallyAddAlternateIconSuffix = (name: string, settings?: Settings) => {
     // SE trumps KR which trumps AAI
     if(settings?.showSeIcons && ICON_ALTERNATES.se.includes(name))
         return name + "-se"

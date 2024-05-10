@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import classNames from "classnames";
 import { useSelectItemsInGroup, useSelectItemGroups } from "../../redux";
-import type { Item } from "../../types";
+import type { Item } from "../../redux/types";
 import { Button } from "../UI";
 import ItemIcon from "../ItemIcon";
 import { useClickOutside } from "./useClickOutside";

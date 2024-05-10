@@ -1,4 +1,4 @@
-import { ColumnsToAssemblers } from "../../types";
+import { ColumnsToAssemblers } from "../../redux/types";
 
 export const findColumnId = (id: string, columns: ColumnsToAssemblers) => {
     if(id in columns) return id

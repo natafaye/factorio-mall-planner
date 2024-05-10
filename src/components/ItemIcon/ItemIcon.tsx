@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useMemo, useRef } from "react"
 import { useSelectSettings } from "../../redux"
 import { getBaseName } from "../../shared"
 import { useImage } from "./useImage"
@@ -8,7 +8,14 @@ export default function ItemImage({
   name, style, className = "", ...props
 }: { name: string } & React.HTMLAttributes<HTMLSpanElement>) {
   const settings = useSelectSettings()
-  const imageName = useMemo(() => getBaseName(name, settings), [name])
+
+  const previousSettings = useRef(settings)
+  const imageName = useMemo(() => {
+    const newName = getBaseName(name, settings, previousSettings.current !== settings)
+    previousSettings.current = settings
+    return newName
+  }, [name, settings])
+
   const { width, height, path } = useImage({
     imageName: imageName,
     fallbackName: "none",

@@ -4,7 +4,7 @@ import AssemblerColumn from "./components/AssemblerColumn"
 import SupplyColumn from "./components/SupplyColumn"
 import SortingContext from "./components/SortingContext"
 import RecipeListLoader from "./components/RecipeListLoader"
-import Settings from "./components/Settings"
+import SettingsPanel from "./components/SettingsPanel"
 import NewColumnButton from "./NewColumnButton"
 
 export default function App() {
@@ -16,7 +16,7 @@ export default function App() {
         <div className="flex flex-col min-h-screen">
           <div className="bg-stone-900 flex">
             <RecipeListLoader />
-            <Settings />
+            <SettingsPanel />
           </div>
           <div className="flex flex-grow overflow-auto m-5 gap-5">
             <SupplyColumn index={0} />

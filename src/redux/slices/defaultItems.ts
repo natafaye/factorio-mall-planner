@@ -1,4 +1,4 @@
-import type { Item } from "../../types";
+import type { Item } from "../types";
 
 export const defaultItems: Array<Item> = [
     { name: "wooden-chest", order: "a[items]-a[wooden-chest]", subgroup: "a", group: "logistics" },

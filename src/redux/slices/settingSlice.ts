@@ -22,3 +22,5 @@ const settingSlice = createSlice({
 export const { setSettings } = settingSlice.actions
 
 export const settingReducer = settingSlice.reducer
+
+export type Settings = typeof initialState
