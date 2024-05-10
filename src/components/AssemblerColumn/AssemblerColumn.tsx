@@ -1,4 +1,3 @@
-import { useDroppable } from "@dnd-kit/core"
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable"
 import classNames from "classnames"
 import {
@@ -13,6 +12,8 @@ import { Button } from "../UI"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import ItemIcon from "../ItemIcon"
+import { useAppDroppable } from "../../shared/sorting"
+import ItemBadge from "../ItemBadge/ItemBadge"
 
 type AssemblerColumnProps = {
     columnId: string
@@ -23,10 +24,17 @@ export default function AssemblerColumn({ columnId, className = "" }: AssemblerC
     const assemblerIdsInColumn = useSelectColumnById(columnId)
     const assemblersInColumn = useSelectAssemblersInColumn(columnId)
 
+    // Get a list of all ingredients needed and filter for unique unsatisfied ones
+    const missingIngredients = assemblersInColumn.flatMap(a => a.recipe?.ingredients)
+        .filter((a, index, list) => a && !a.satisfied && list.findIndex(b => b?.name === a.name) === index)
+
     const dispatch = useAppDispatch()
 
-    const { isOver, setNodeRef } = useDroppable({
-        id: columnId
+    const { isOver, setNodeRef } = useAppDroppable({
+        id: columnId,
+        data: {
+            supports: ["assembler"]
+        }
     })
 
     return (
@@ -58,9 +66,15 @@ export default function AssemblerColumn({ columnId, className = "" }: AssemblerC
                         <FontAwesomeIcon icon={faTrash} />
                     </Button>
                 </div>
-                <div>
-                    
-                </div>
+                { missingIngredients.length > 0 && 
+                    <>
+                        <div className="flex flex-wrap gap-2 mt-3 bg-red-900 p-3 w-full justify-center">
+                            {missingIngredients.map(i => i && (
+                                <ItemBadge key={i.name} name={i.name} />
+                            ))}
+                        </div>
+                    </>
+                }
                 {assemblersInColumn.map(assembler => (
                     <SortableAssemblerCard key={assembler.id} assembler={assembler} />
                 ))}

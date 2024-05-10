@@ -1,6 +1,6 @@
 import { CSSProperties, ReactNode, forwardRef } from "react"
 import { useAppDispatch, removeAssembler } from "../../redux"
-import IngredientBadge from "./IngredientBadge"
+import IngredientBadge from "../ItemBadge/ItemBadge"
 import ItemIcon from "../ItemIcon"
 import type { AssemblerFullData } from "../../redux/types"
 
@@ -38,8 +38,9 @@ const AssemblerCard = forwardRef<HTMLDivElement, AssemblerProps>(
                     {assembler.recipe?.ingredients?.map((ingredient) => (
                         <IngredientBadge
                             key={ingredient.name}
-                            ingredient={ingredient}
-                            isSatisfied={ingredient.satisfied}
+                            name={ingredient.name}
+                            amount={ingredient.amount}
+                            satisfied={ingredient.satisfied}
                         />
                     ))}
                 </div>

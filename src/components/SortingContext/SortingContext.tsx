@@ -4,7 +4,8 @@ import {
     MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors
 } from "@dnd-kit/core";
 import { 
-    useAppDispatch, useSelectAssemblerById, moveAssembler, replaceAllColumns 
+    useAppDispatch, useSelectAssemblerById, moveAssembler, replaceAllColumns, 
+    addSupply
 } from "../../redux";
 import { AssemblerCard } from "../AssemblerColumn";
 import DragHandle from "../DragHandle/DragHandle";
@@ -12,16 +13,19 @@ import { useMultipleContainersCollisionDetection } from "./useMultipleContainers
 import { multipleContainersKeyboardCoordinateGetter } from "./multipleContainersKeyboardCoordinates";
 import { findColumnId } from "./findColumnId";
 import { ColumnsToAssemblers } from "../../redux/types";
+import { DraggableData, DraggableType, DroppableData } from "../../shared/sorting";
+import ItemBadge from "../ItemBadge";
 
 export const NEW_PREFIX = "NEW"
 
 export default function SortingContext({ children, data }: { children: ReactNode, data: ColumnsToAssemblers }) {
     // State
     const [clonedData, setClonedData] = useState<ColumnsToAssemblers | null>(null)
-    const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+    const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
+    const [activeType, setActiveType] = useState<DraggableType | null>(null)
 
     // Redux
-    const activeItem = useSelectAssemblerById(activeId as string)
+    const activeAssemblerItem = useSelectAssemblerById(activeId?.toString())
     const dispatch = useAppDispatch()
 
     // Refs
@@ -47,26 +51,41 @@ export default function SortingContext({ children, data }: { children: ReactNode
     const handleDragCancel = () => {
         if (clonedData) dispatch(replaceAllColumns(clonedData))
         setActiveId(null)
+        setActiveType(null)
         setClonedData(null)
     };
 
     const handleDragStart = ({ active }: DragStartEvent) => {
         setActiveId(active.id)
+        setActiveType((active.data.current as DraggableData).type)
         setClonedData(data)
     }
 
+    const parseActiveItemId = (id: UniqueIdentifier) => {
+        return id.toString().split("+")[0]
+    }
+
     const handleDragOver = ({ active, over }: DragOverEvent) => {
-        const overId = over?.id;
+        if(over === null || activeId === null) return
 
-        if (!overId) return
+        const activeData = active.data.current as DraggableData
+        const overData = over.data.current as DroppableData
 
-        const overColumnId = findColumnId(overId.toString(), data);
+        console.log({ over, active })
+
+        if(!overData.supports.includes(activeData.type)) return
+        
+        const overId = over.id.toString()
+
+        if(activeData.type === "item") return
+
+        const overColumnId = findColumnId(overId, data);
         const activeColumnId = findColumnId(active.id.toString(), data);
 
         if (!overColumnId || !activeColumnId || activeColumnId === overColumnId) return
 
         const overColumn = data[overColumnId]
-        const overIndex = overColumn.indexOf(overId.toString());
+        const overIndex = overColumn.indexOf(overId);
 
         let newIndex: number
 
@@ -95,30 +114,47 @@ export default function SortingContext({ children, data }: { children: ReactNode
     }
 
     const handleDragEnd = ({ active, over }: DragEndEvent) => {
-        const overId = over?.id
-        const activeColumnId = findColumnId(active.id.toString(), data)
+        if(over === null || activeId === null) return
 
-        if (!activeColumnId || overId == null) {
+        const activeData = active.data.current as DraggableData
+        const overData = over.data.current as DroppableData
+
+        if(!overData.supports.includes(activeData.type)) return
+        
+        const overId = over.id.toString()
+
+        if(activeData.type === "item") {
+            dispatch(addSupply({ name: parseActiveItemId(activeId), index: parseInt(overId) }))
             setActiveId(null)
+            setActiveType(null)
             return
         }
 
-        if(overId.toString().startsWith(NEW_PREFIX)) {
+        const activeColumnId = findColumnId(active.id.toString(), data)
+
+        if (!activeColumnId) {
+            setActiveId(null)
+            setActiveType(null)
+            return
+        }
+
+        if(overId.startsWith(NEW_PREFIX)) {
             dispatch(moveAssembler({
                 oldColumnId: activeColumnId,
                 assemblerId: active.id.toString(),
                 newIndex: 0
             }))
             setActiveId(null)
+            setActiveType(null)
             return
         }
 
-        const overColumnId = findColumnId(overId.toString(), data)
+        const overColumnId = findColumnId(overId, data)
 
         if (!overColumnId) return
 
         const activeIndex = data[activeColumnId].indexOf(active.id.toString());
-        const overIndex = data[overColumnId].indexOf(overId.toString());
+        const overIndex = data[overColumnId].indexOf(overId);
 
         if (activeIndex === overIndex) return
 
@@ -130,6 +166,7 @@ export default function SortingContext({ children, data }: { children: ReactNode
         }))
 
         setActiveId(null)
+        setActiveType(null)
     }
     return (
         <DndContext
@@ -142,11 +179,13 @@ export default function SortingContext({ children, data }: { children: ReactNode
         >
             {children}
             <DragOverlay className="w-64" dropAnimation={{ duration: 250, easing: "ease" }}>
-                {!activeItem ? null : (
-                    <AssemblerCard key={activeItem.id} assembler={activeItem}>
+                {activeType === "assembler" ? (
+                    <AssemblerCard key={activeAssemblerItem!.id} assembler={activeAssemblerItem!}>
                         <DragHandle />
                     </AssemblerCard>
-                )}
+                ) : activeType === "item" ? (
+                    <ItemBadge key={activeId} name={parseActiveItemId(activeId!)}/>
+                ) : null }
             </DragOverlay>
         </DndContext>
     )

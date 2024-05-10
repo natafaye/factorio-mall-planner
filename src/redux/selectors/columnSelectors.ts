@@ -17,7 +17,7 @@ export const useSelectColumnToAssemblers = createAppSelectorHook(selectColumnToA
 // Assembler By Id Selector Hook
 export const useSelectAssemblerById = createAppSelectorHook(createAppSelector(
     [
-        (_, assemblerId: string | null) => assemblerId,
+        (_, assemblerId: string | undefined) => assemblerId,
         selectColumnToAssemblers,
         selectColumnOrder,
         selectAllAssemblers,
@@ -27,6 +27,7 @@ export const useSelectAssemblerById = createAppSelectorHook(createAppSelector(
     (assemblerId, columnToAssemblers, columnOrder, allAssemblers, allRecipes, supplyLines) => {
         if(!assemblerId) return undefined
         const assembler = allAssemblers[assemblerId]
+        if(!assembler) return undefined
         const column = columnToAssemblers[assembler.columnId]
         const columnIndex = columnOrder.indexOf(assembler.columnId)
         return getAssemblerWithRecipeAndSatisfaction(

@@ -1,14 +1,17 @@
-import { useDroppable } from "@dnd-kit/core";
 import { Button } from "./components/UI";
 import classNames from "classnames";
 import { NEW_PREFIX } from "./components/SortingContext/SortingContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { addColumn, useAppDispatch } from "./redux";
+import { useAppDroppable } from "./shared/sorting";
 
 export default function NewColumnButton() {
-    const { setNodeRef, isOver } = useDroppable({
-        id: NEW_PREFIX
+    const { setNodeRef, isOver } = useAppDroppable({
+        id: NEW_PREFIX,
+        data: {
+            supports: ["assembler"]
+        }
     })
 
     const dispatch = useAppDispatch()

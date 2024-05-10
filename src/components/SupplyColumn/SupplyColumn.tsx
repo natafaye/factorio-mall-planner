@@ -3,14 +3,26 @@ import { addSupply, useSelectSupplyLineByIndex, removeSupply, useAppDispatch } f
 import ItemIcon from "../ItemIcon"
 import { ItemSelector } from "../RecipeSelector"
 import { faAngleDown, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { useAppDroppable } from "../../shared/sorting"
+import classNames from "classnames"
 
 export default function SupplyColumn({ index }: { index: number }) {
     const beltsInColumn = useSelectSupplyLineByIndex(index)
 
     const dispatch = useAppDispatch()
 
+    const { setNodeRef, isOver } = useAppDroppable({
+        id: index,
+        data: {
+            supports: ["item"]
+        }
+    })
+
     return (
-        <div className="flex flex-col items-center border border-1 rounded-md border-stone-700 pt-2 min-w-32">
+        <div ref={setNodeRef} className={classNames(
+            "flex flex-col items-center border border-1 rounded-md pt-2 min-w-32",
+            isOver ? "border-stone-500" : "border-stone-700"
+        )}>
             <ItemSelector
                 onChange={(name) => dispatch(addSupply({ name, index }))}
             >
