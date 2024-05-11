@@ -1,11 +1,19 @@
 import { ReactNode, useEffect, useRef, useState } from "react"
-import { useSelectRecipesBySearch } from "../../redux"
-import { Recipe } from "../../redux/types"
+import { useSelectBySearch } from "../../redux"
 import { Input } from "../UI"
+import type { BaseEntity } from "../../redux/types"
 
-export default function RecipeSearchPanel({ children }: { children: (r: Recipe) => ReactNode }) {
+type Props<Type> = { 
+    type: "item" | "recipe"
+    renderResult: (entity: Type) => ReactNode
+    emptyText: string
+}
+
+export default function SearchPanel<Type extends BaseEntity>({ 
+    type, renderResult, emptyText 
+}: Props<Type>) {
     const [searchTerm, setSearchTerm] = useState("")
-    const recipesInSearch = useSelectRecipesBySearch(searchTerm)
+    const searchResults = useSelectBySearch(type, searchTerm) as Type[]
 
     // Focus the input on component load
     const inputRef = useRef<HTMLInputElement>(null)
@@ -22,10 +30,10 @@ export default function RecipeSearchPanel({ children }: { children: (r: Recipe) 
                 value={searchTerm}
                 onChange={({ target }) => setSearchTerm(target.value)}
             />
-            { recipesInSearch.length ? 
-                recipesInSearch.map(children)
+            { searchResults.length ? 
+                searchResults.map(renderResult)
                 : <p className="text-stone-400 text-center">
-                    Search by recipe name, or use "i:" to search by ingredient
+                    { emptyText }
                 </p>
             }
         </div>

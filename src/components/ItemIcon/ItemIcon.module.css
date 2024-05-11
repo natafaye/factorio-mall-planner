@@ -1,53 +1,42 @@
-.icon120x64 {
+.sm {
+    width: 16px;
+    height: 16px;
+    background-position: 0px 0px;
+}
+
+.md {
     width: 32px;
     height: 32px;
+    background-position: 0px 0px;
+}
+
+.lg {
+    width: 64px;
+    height: 64px;
+    background-position: 0px 0px;
+}
+
+.icon120x64-sm {
+    background-position: 24px 0px;
+}
+
+.icon120x65-sm {
+    background-position: 24px 0px;
+}
+
+.icon120x64-md {
     background-position: 56px 0px;
 }
 
-.icon120x65 {
-    width: 32px;
-    height: 32px;
+.icon120x65-md {
     background-position: 56px 0px;
 }
 
-.icon32x32 {
-    width: 32px;
-    height: 32px;
-    background-position: 0px 0px;
-    background-size: cover;
-}
-
-.icon64x64 {
-    width: 32px;
-    height: 32px;
-    background-position: 0px 0px;
-    background-size: cover;
-}
-
-.icon64x65 {
-    width: 32px;
-    height: 32px;
-    background-position: 0px 0px;
-    background-size: cover;
-}
-
-.icon128x128 {
-    width: 32px;
-    height: 32px;
-    background-position: 0px 0px;
-    background-size: cover;
-}
-
-.icon240x128 {
-    width: 32px;
-    height: 32px;
-    background-position: 0px 0px;
-    background-size: cover;
-}
-
-.icon130x136 {
-    width: 32px;
-    height: 32px;
-    background-position: 0px 0px;
+.icon32x32-sm, .icon64x64-sm, .icon64x65-sm, 
+.icon128x128-sm, .icon240x128-sm, .icon130x136-sm,
+.icon32x32-md, .icon64x64-md, .icon64x65-md, 
+.icon128x128-md, .icon240x128-md, .icon130x136-md,
+.icon32x32-lg, .icon64x64-lg, .icon64x65-lg, 
+.icon128x128-lg, .icon240x128-lg, .icon130x136-lg {
     background-size: cover;
 }

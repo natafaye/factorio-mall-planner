@@ -2,6 +2,8 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { v4 as uuid } from "uuid"
 import type { Assembler, ColumnsToAssemblers} from '../types'
 
+type NewAssemblerData = Omit<Assembler, "id" | "columnId"> & { columnId?: string }
+
 /***** Initial State *****/
 
 const starterId1 = uuid()
@@ -29,10 +31,20 @@ export const mallSlice = createSlice({
     reducers: {
 
         // Assemblers
-        addAssembler: (state, action: PayloadAction<Omit<Assembler, "id">>) => {
+        addAssembler: (state, action: PayloadAction<NewAssemblerData>) => {
+            let newColumnId = action.payload.columnId
+            if(!newColumnId) {
+                // Create the column
+                newColumnId = uuid()
+                state.columnToAssemblers[newColumnId] = []
+                state.columnOrder.push(newColumnId)
+                // Create the supply line
+                state.supplyLines.push([])
+            }
             const newAssembler = {
                 id: uuid(),
-                ...action.payload
+                ...action.payload,
+                columnId: newColumnId
             }
             state.columnToAssemblers[newAssembler.columnId].push(newAssembler.id)
             state.assemblers[newAssembler.id] = newAssembler
@@ -106,6 +118,8 @@ export const mallSlice = createSlice({
         // Supply Lines
         addSupply: (state, action: PayloadAction<{ name: string, index: number }>) => {
             const { name, index } = action.payload
+            // Don't add a repeat
+            if(state.supplyLines[index].includes(name)) return
             state.supplyLines[index].push(name)
         },
         removeSupply: (state, action: PayloadAction<{ name: string, index: number }>) => {

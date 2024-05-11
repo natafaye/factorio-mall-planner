@@ -1,16 +1,17 @@
-import { Button } from "./components/UI";
+import { Button } from "../UI";
 import classNames from "classnames";
-import { NEW_PREFIX } from "./components/SortingContext/SortingContext";
+import { NEW_PREFIX } from "../SortingContext/SortingContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { addColumn, useAppDispatch } from "./redux";
-import { useAppDroppable } from "./shared/sorting";
+import { addColumn, useAppDispatch } from "../../redux";
+import { useAppDroppable } from "../../shared/sorting";
 
-export default function NewColumnButton() {
+export function NewColumnButton() {
     const { setNodeRef, isOver } = useAppDroppable({
         id: NEW_PREFIX,
         data: {
-            supports: ["assembler"]
+            type: "assembler",
+            supports: ["assembler", "item"]
         }
     })
 

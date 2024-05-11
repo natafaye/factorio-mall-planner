@@ -5,18 +5,24 @@ import {
 } from "@dnd-kit/core";
 import { 
     useAppDispatch, useSelectAssemblerById, moveAssembler, replaceAllColumns, 
-    addSupply
+    addSupply,
+    addAssembler,
+    useSelectAllRecipes
 } from "../../redux";
-import { AssemblerCard } from "../AssemblerColumn";
-import DragHandle from "../DragHandle/DragHandle";
+import { AssemblerCard } from "../AssemblerCard";
+import DragHandle from "../DragHandle";
+import ItemBadge from "../ItemBadge";
 import { useMultipleContainersCollisionDetection } from "./useMultipleContainersCollisionDetection";
 import { multipleContainersKeyboardCoordinateGetter } from "./multipleContainersKeyboardCoordinates";
 import { findColumnId } from "./findColumnId";
 import { ColumnsToAssemblers } from "../../redux/types";
 import { DraggableData, DraggableType, DroppableData } from "../../shared/sorting";
-import ItemBadge from "../ItemBadge";
 
 export const NEW_PREFIX = "NEW"
+
+const parseActiveItemId = (id: UniqueIdentifier) => {
+    return id.toString().split("+")[0]
+}
 
 export default function SortingContext({ children, data }: { children: ReactNode, data: ColumnsToAssemblers }) {
     // State
@@ -26,6 +32,7 @@ export default function SortingContext({ children, data }: { children: ReactNode
 
     // Redux
     const activeAssemblerItem = useSelectAssemblerById(activeId?.toString())
+    const recipeList = useSelectAllRecipes()
     const dispatch = useAppDispatch()
 
     // Refs
@@ -61,17 +68,11 @@ export default function SortingContext({ children, data }: { children: ReactNode
         setClonedData(data)
     }
 
-    const parseActiveItemId = (id: UniqueIdentifier) => {
-        return id.toString().split("+")[0]
-    }
-
     const handleDragOver = ({ active, over }: DragOverEvent) => {
-        if(over === null || activeId === null) return
+        if(over === null || over === undefined || activeId === null) return
 
         const activeData = active.data.current as DraggableData
         const overData = over.data.current as DroppableData
-
-        console.log({ over, active })
 
         if(!overData.supports.includes(activeData.type)) return
         
@@ -114,7 +115,7 @@ export default function SortingContext({ children, data }: { children: ReactNode
     }
 
     const handleDragEnd = ({ active, over }: DragEndEvent) => {
-        if(over === null || activeId === null) return
+        if(over === null || over === undefined || activeId === null) return
 
         const activeData = active.data.current as DraggableData
         const overData = over.data.current as DroppableData
@@ -123,8 +124,21 @@ export default function SortingContext({ children, data }: { children: ReactNode
         
         const overId = over.id.toString()
 
-        if(activeData.type === "item") {
+        if(activeData.type === "item" && overData.type === "supply") {
             dispatch(addSupply({ name: parseActiveItemId(activeId), index: parseInt(overId) }))
+            setActiveId(null)
+            setActiveType(null)
+            return
+        }
+
+        if(activeData.type === "item" && overData.type === "assembler") {
+            const recipeName = parseActiveItemId(activeId)
+            if(!recipeList.some(r => r.name === recipeName)) return
+
+            // will be undefined if dropped on new column button
+            const columnId = findColumnId(overId, data)
+
+            dispatch(addAssembler({ recipeName, columnId }))
             setActiveId(null)
             setActiveType(null)
             return
@@ -179,11 +193,11 @@ export default function SortingContext({ children, data }: { children: ReactNode
         >
             {children}
             <DragOverlay className="w-64" dropAnimation={{ duration: 250, easing: "ease" }}>
-                {activeType === "assembler" ? (
+                {activeType === "assembler" && activeAssemblerItem ? (
                     <AssemblerCard key={activeAssemblerItem!.id} assembler={activeAssemblerItem!}>
                         <DragHandle />
                     </AssemblerCard>
-                ) : activeType === "item" ? (
+                ) : activeType === "item" && activeId ? (
                     <ItemBadge key={activeId} name={parseActiveItemId(activeId!)}/>
                 ) : null }
             </DragOverlay>

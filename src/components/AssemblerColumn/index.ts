@@ -1,5 +1,5 @@
 import AssemblerColumn from "./AssemblerColumn";
 
-export default AssemblerColumn
+export { NewColumnButton } from "./NewColumnButton"
 
-export { default as AssemblerCard} from "./AssemblerCard"
+export default AssemblerColumn

@@ -1,11 +1,12 @@
 import React from "react"
 import { useSelectColumnToAssemblers, useSelectColumnOrder } from "./redux"
-import AssemblerColumn from "./components/AssemblerColumn"
+import AssemblerColumn, { NewColumnButton } from "./components/AssemblerColumn"
 import SupplyColumn from "./components/SupplyColumn"
 import SortingContext from "./components/SortingContext"
 import RecipeListLoader from "./components/RecipeListLoader"
 import SettingsPanel from "./components/SettingsPanel"
-import NewColumnButton from "./NewColumnButton"
+import AssemblerDrawer from "./components/AssemblerDrawer"
+import CollapsingDrawer from "./components/CollapsingDrawer"
 
 export default function App() {
   const columnIds = useSelectColumnOrder()
@@ -13,12 +14,9 @@ export default function App() {
 
   return (
       <SortingContext data={columnsToAssemblers}>
-        <div className="flex flex-col min-h-screen">
-          <div className="bg-stone-900 flex">
-            <RecipeListLoader />
-            <SettingsPanel />
-          </div>
-          <div className="flex flex-grow overflow-auto m-5 gap-5">
+        <div className="flex flex-col h-screen">
+          <AssemblerDrawer/>
+          <div className="flex flex-grow m-5 gap-5 overflow-auto">
             <SupplyColumn index={0} />
             {columnIds.map((columnId, index) => (
               <React.Fragment key={index + 1}>
@@ -28,6 +26,10 @@ export default function App() {
             ))}
             <NewColumnButton />
           </div>
+          <CollapsingDrawer direction="down" className="bg-stone-900 flex">
+            <RecipeListLoader />
+            <SettingsPanel />
+          </CollapsingDrawer>
         </div>
       </SortingContext>
   )

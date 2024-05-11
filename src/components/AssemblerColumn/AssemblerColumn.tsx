@@ -1,26 +1,26 @@
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable"
-import classNames from "classnames"
 import {
     useAppDispatch, addAssembler,
     removeColumn,
     useSelectAssemblersInColumn,
     useSelectColumnById
 } from "../../redux"
-import RecipeSelector from "../RecipeSelector"
-import SortableAssemblerCard from "./SortableAssemblerCard"
-import { Button } from "../UI"
+import classNames from "classnames"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { SortableAssemblerCard } from "../AssemblerCard"
+import { Button } from "../UI"
 import ItemIcon from "../ItemIcon"
+import ItemBadge from "../ItemBadge"
+import EntitySelector from "../EntitySelector"
 import { useAppDroppable } from "../../shared/sorting"
-import ItemBadge from "../ItemBadge/ItemBadge"
 
-type AssemblerColumnProps = {
+type Props = {
     columnId: string
     className?: string
 }
 
-export default function AssemblerColumn({ columnId, className = "" }: AssemblerColumnProps) {
+export default function AssemblerColumn({ columnId, className = "" }: Props) {
     const assemblerIdsInColumn = useSelectColumnById(columnId)
     const assemblersInColumn = useSelectAssemblersInColumn(columnId)
 
@@ -33,7 +33,8 @@ export default function AssemblerColumn({ columnId, className = "" }: AssemblerC
     const { isOver, setNodeRef } = useAppDroppable({
         id: columnId,
         data: {
-            supports: ["assembler"]
+            type: "assembler",
+            supports: ["assembler", "item"]
         }
     })
 
@@ -44,11 +45,12 @@ export default function AssemblerColumn({ columnId, className = "" }: AssemblerC
                 className={classNames(
                     className,
                     isOver ? "border-stone-500" : "border-stone-700",
-                    "rounded-md border basis-64 flex-shrink-0 flex flex-col items-center"
+                    "rounded-md border w-64 flex-shrink-0 flex flex-col items-center"
                 )}
             >
                 <div className="flex gap-2 mt-2">
-                    <RecipeSelector
+                    <EntitySelector
+                        type="recipe"
                         onChange={
                             (recipeName) => dispatch(addAssembler({ recipeName, columnId }))
                         }
@@ -57,7 +59,7 @@ export default function AssemblerColumn({ columnId, className = "" }: AssemblerC
                             <FontAwesomeIcon icon={faPlus} />
                             <ItemIcon name="assembling-machine-1" />
                         </span>
-                    </RecipeSelector>
+                    </EntitySelector>
                     <Button
 
                         title="Delete Column"
@@ -66,7 +68,7 @@ export default function AssemblerColumn({ columnId, className = "" }: AssemblerC
                         <FontAwesomeIcon icon={faTrash} />
                     </Button>
                 </div>
-                { missingIngredients.length > 0 && 
+                {missingIngredients.length > 0 &&
                     <>
                         <div className="flex flex-wrap gap-2 mt-3 bg-red-900 p-3 w-full justify-center">
                             {missingIngredients.map(i => i && (
@@ -75,9 +77,11 @@ export default function AssemblerColumn({ columnId, className = "" }: AssemblerC
                         </div>
                     </>
                 }
-                {assemblersInColumn.map(assembler => (
-                    <SortableAssemblerCard key={assembler.id} assembler={assembler} />
-                ))}
+                <div className="overflow-auto">
+                    {assemblersInColumn.map(assembler => (
+                        <SortableAssemblerCard key={assembler.id} assembler={assembler} />
+                    ))}
+                </div>
             </div>
         </SortableContext>
     )

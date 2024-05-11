@@ -3,10 +3,11 @@ import { useSelectSettings } from "../../redux"
 import { getBaseName } from "../../shared"
 import { useImage } from "./useImage"
 import styles from "./ItemIcon.module.css"
+import classNames from "classnames"
 
 export default function ItemImage({
-  name, style, className = "", ...props
-}: { name: string } & React.HTMLAttributes<HTMLSpanElement>) {
+  name, style, className = "", size = "md", ...props
+}: { name: string, size?: "sm" | "md" | "lg" } & React.HTMLAttributes<HTMLSpanElement>) {
   const settings = useSelectSettings()
 
   const previousSettings = useRef(settings)
@@ -25,7 +26,12 @@ export default function ItemImage({
 
   return (
     <span
-      className={`${styles[`icon${width}x${height}`]} ${className} inline-block`}
+      className={classNames(
+        className,
+        "inline-block",
+        styles[size],
+        styles[`icon${width}x${height}-${size}`],
+      )}
       style={{ backgroundImage: `url(${path})`, ...style }}
       title={name}
       {...props}

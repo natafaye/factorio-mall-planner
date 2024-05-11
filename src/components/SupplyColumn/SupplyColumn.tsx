@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { addSupply, useSelectSupplyLineByIndex, removeSupply, useAppDispatch } from "../../redux"
 import ItemIcon from "../ItemIcon"
-import { ItemSelector } from "../RecipeSelector"
+import EntitySelector from "../EntitySelector"
 import { faAngleDown, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { useAppDroppable } from "../../shared/sorting"
 import classNames from "classnames"
@@ -14,6 +14,7 @@ export default function SupplyColumn({ index }: { index: number }) {
     const { setNodeRef, isOver } = useAppDroppable({
         id: index,
         data: {
+            type: "supply",
             supports: ["item"]
         }
     })
@@ -23,14 +24,15 @@ export default function SupplyColumn({ index }: { index: number }) {
             "flex flex-col items-center border border-1 rounded-md pt-2 min-w-32",
             isOver ? "border-stone-500" : "border-stone-700"
         )}>
-            <ItemSelector
+            <EntitySelector
+                type="item"
                 onChange={(name) => dispatch(addSupply({ name, index }))}
             >
                 <span className="inline-flex items-center gap-2">
                     <FontAwesomeIcon icon={faPlus}/>
                     <ItemIcon name="transport-belt"/>
                 </span>
-            </ItemSelector>
+            </EntitySelector>
             <div className="flex gap-2 p-2">
                 {beltsInColumn.map(item => (
                     <div key={item} className="bg-stone-600 flex flex-col items-center p-1">

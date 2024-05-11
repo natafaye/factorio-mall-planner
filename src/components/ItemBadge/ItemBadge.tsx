@@ -8,9 +8,10 @@ type Props = {
     name: string,
     amount?: number,
     satisfied?: boolean
+    size?: "sm" | "md" | "lg"
 }
 
-export default function ItemBadge({ name, amount, satisfied }: Props) {
+export default function ItemBadge({ name, amount, satisfied, size = "md" }: Props) {
     const id = useRef(name + "+" + uuid())
     const { setNodeRef, attributes, listeners } = useAppDraggable({
         id: id.current,
@@ -21,7 +22,8 @@ export default function ItemBadge({ name, amount, satisfied }: Props) {
 
     return (
         <div ref={setNodeRef} {...attributes} {...listeners}>
-            <div className={classNames("bg-stone-900 p-1 text-white flex items-center justify-center",
+            <div className={classNames("bg-stone-900 text-white flex items-center justify-center",
+                size === "lg" ? "p-3" : size === "md" ? "p-1" : "p-1",
                 amount !== undefined && "ps-2",
                 satisfied !== undefined ? "rounded-t-lg" : "rounded-lg"
             )}>
@@ -29,6 +31,7 @@ export default function ItemBadge({ name, amount, satisfied }: Props) {
                 <ItemIcon
                     key={name}
                     name={name}
+                    size={size}
                     className={classNames(amount !== undefined && "ms-1")}
                 />
             </div>

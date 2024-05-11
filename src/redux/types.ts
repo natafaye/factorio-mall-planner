@@ -1,17 +1,16 @@
 
-export type Recipe = {
+export type BaseEntity = {
     name: string
     group: string
     subgroup: string
-    time: number
+}
+
+export type Recipe = BaseEntity & {
     products: Array<{ name: string, amount: number }>
     ingredients: Array<{ name: string, amount: number }>
 }
 
-export type Item = {
-    name: string
-    group: string
-    subgroup: string
+export type Item = BaseEntity & {
     order: string
 }
 

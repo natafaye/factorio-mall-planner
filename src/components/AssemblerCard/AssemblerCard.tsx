@@ -1,6 +1,6 @@
 import { CSSProperties, ReactNode, forwardRef } from "react"
 import { useAppDispatch, removeAssembler } from "../../redux"
-import IngredientBadge from "../ItemBadge/ItemBadge"
+import ItemBadge from "../ItemBadge"
 import ItemIcon from "../ItemIcon"
 import type { AssemblerFullData } from "../../redux/types"
 
@@ -11,7 +11,7 @@ type AssemblerProps = {
     style?: CSSProperties
 }
 
-const AssemblerCard = forwardRef<HTMLDivElement, AssemblerProps>(
+export const AssemblerCard = forwardRef<HTMLDivElement, AssemblerProps>(
     ({ assembler, children, className = "", style = {} }, ref) => {
         const dispatch = useAppDispatch()
 
@@ -33,10 +33,10 @@ const AssemblerCard = forwardRef<HTMLDivElement, AssemblerProps>(
                         &#x2715;
                     </button>
                 </div>
-                <ItemIcon name={assembler.recipeName} />
+                <ItemIcon name={assembler.recipeName} size="md" />
                 <div className="flex flex-wrap gap-2 m-3">
                     {assembler.recipe?.ingredients?.map((ingredient) => (
-                        <IngredientBadge
+                        <ItemBadge
                             key={ingredient.name}
                             name={ingredient.name}
                             amount={ingredient.amount}
@@ -48,5 +48,3 @@ const AssemblerCard = forwardRef<HTMLDivElement, AssemblerProps>(
         )
     }
 )
-
-export default AssemblerCard

@@ -8,6 +8,7 @@ export type DraggableData = {
 }
 
 export type DroppableData = {
+    type: "supply" | "assembler"
     supports: DraggableType[]
 }
 

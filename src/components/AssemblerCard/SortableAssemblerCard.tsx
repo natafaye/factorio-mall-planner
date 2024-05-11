@@ -1,10 +1,10 @@
 import { CSS } from "@dnd-kit/utilities"
-import AssemblerCard from "./AssemblerCard"
+import { AssemblerCard } from "./AssemblerCard"
 import DragHandle from "../DragHandle"
 import type { AssemblerFullData } from "../../redux/types"
 import { useAppSortable } from "../../shared/sorting"
 
-export default function SortableAssemblerCard({ assembler }: { assembler: AssemblerFullData }) {
+export function SortableAssemblerCard({ assembler }: { assembler: AssemblerFullData }) {
     const { 
         attributes, listeners, isDragging, transform, transition,
         setNodeRef, setActivatorNodeRef, 
@@ -12,7 +12,7 @@ export default function SortableAssemblerCard({ assembler }: { assembler: Assemb
         id: assembler.id,
         data: {
             type: "assembler",
-            supports: ["assembler"]
+            supports: ["assembler", "item"]
         }
     })
 

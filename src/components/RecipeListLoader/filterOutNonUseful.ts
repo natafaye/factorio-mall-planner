@@ -33,8 +33,9 @@ export const filterOutNonUseful = <T extends RecipeOrItem>(
             || name.match(/(?<!empty)-barrel$/)
         ) && !(
             ingredients ? (
-                ingredients.length === 1 
-                && getBaseName(ingredients[0].name) === getBaseName(name)
+                ingredients.length === 0 ||
+                ingredients.length === 1 && 
+                    getBaseName(ingredients[0].name) === getBaseName(name)
             ) : false
         ) && !(
                group === "other"
