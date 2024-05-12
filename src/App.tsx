@@ -14,9 +14,9 @@ export default function App() {
 
   return (
       <SortingContext data={columnsToAssemblers}>
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-screen max-h-screen">
           <AssemblerDrawer/>
-          <div className="flex flex-grow m-5 gap-5 overflow-auto">
+          <div className="flex flex-grow p-5 gap-5 overflow-auto">
             <SupplyColumn index={0} />
             {columnIds.map((columnId, index) => (
               <React.Fragment key={index + 1}>
@@ -26,7 +26,7 @@ export default function App() {
             ))}
             <NewColumnButton />
           </div>
-          <CollapsingDrawer direction="down" className="bg-stone-900 flex">
+          <CollapsingDrawer direction="down" className="bg-stone-900 flex flex-wrap">
             <RecipeListLoader />
             <SettingsPanel />
           </CollapsingDrawer>

@@ -9,38 +9,42 @@ type AssemblerProps = {
     children?: ReactNode
     className?: string
     style?: CSSProperties
+    size?: "sm" | "md" | "lg"
 }
 
 export const AssemblerCard = forwardRef<HTMLDivElement, AssemblerProps>(
-    ({ assembler, children, className = "", style = {} }, ref) => {
+    ({ assembler, children, size = "md", className = "", style = {} }, ref) => {
         const dispatch = useAppDispatch()
 
         return (
             <div
                 ref={ref}
                 style={style}
-                className={`${className} bg-stone-700 w-56 m-3 p-1 rounded-2xl flex flex-col items-center`}
+                className={`${className} group relative bg-stone-700 m-3 p-1 rounded-2xl flex flex-col items-center`}
             >
-                <div className="flex items-center w-full mb-3">
-                    <div className="flex-grow">
+                <div className="absolute w-full mb-3 hidden group-hover:flex">
+                    <div className="flex-grow -mt-1">
                         {children}
                     </div>
                     <button
                         onClick={() => dispatch(removeAssembler(assembler))}
-                        className="text-stone-500 font-bold -ms-7 p-2 py-1 rounded-md 
-                        hover:bg-stone-600 hover:text-stone-400"
+                        className="-ms-6 pt-1 pe-3 font-bold text-stone-500 hover:text-stone-400"
                     >
                         &#x2715;
                     </button>
                 </div>
-                <ItemIcon name={assembler.recipeName} size="md" />
-                <div className="flex flex-wrap gap-2 m-3">
+                <ItemIcon
+                    name={assembler.recipeName}
+                    size={size}
+                    className="mt-5"
+                />
+                <div className="flex flex-wrap justify-center gap-2 m-3">
                     {assembler.recipe?.ingredients?.map((ingredient) => (
                         <ItemBadge
                             key={ingredient.name}
                             name={ingredient.name}
-                            amount={ingredient.amount}
                             satisfied={ingredient.satisfied}
+                            size={size}
                         />
                     ))}
                 </div>

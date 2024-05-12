@@ -64,7 +64,8 @@ export default function EntitySelector({
                 {children}
             </Button>
             {showMenu && (
-                <div className="absolute bg-stone-700 shadow-xl p-[16px] -mt-2 rounded-md z-10 w-[475px]">
+                <div className="absolute bg-stone-700 shadow-xl -mt-2 
+                    rounded-md z-10 w-[360px] max-h-[480px] flex flex-col overflow-auto">
                     <div className="flex flex-wrap">
                         {["search", ...groups].map(groupName => (
                             <button
@@ -80,7 +81,7 @@ export default function EntitySelector({
                         ))}
 
                     </div>
-                    <div className="mt-2">
+                    <div className="ps-4 pe-0 py-3 overflow-auto">
                         {selectedGroup === "search" ?
                             <SearchPanel
                                 type={type}

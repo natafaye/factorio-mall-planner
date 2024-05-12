@@ -3,8 +3,8 @@ import {
     DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, KeyboardSensor,
     MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors
 } from "@dnd-kit/core";
-import { 
-    useAppDispatch, useSelectAssemblerById, moveAssembler, replaceAllColumns, 
+import {
+    useAppDispatch, useSelectAssemblerById, moveAssembler, replaceAllColumns,
     addSupply,
     addAssembler,
     useSelectAllRecipes
@@ -69,16 +69,16 @@ export default function SortingContext({ children, data }: { children: ReactNode
     }
 
     const handleDragOver = ({ active, over }: DragOverEvent) => {
-        if(over === null || over === undefined || activeId === null) return
+        if (over === null || over === undefined || activeId === null) return
 
         const activeData = active.data.current as DraggableData
         const overData = over.data.current as DroppableData
 
-        if(!overData.supports.includes(activeData.type)) return
-        
+        if (!overData.supports.includes(activeData.type)) return
+
         const overId = over.id.toString()
 
-        if(activeData.type === "item") return
+        if (activeData.type === "item") return
 
         const overColumnId = findColumnId(overId, data);
         const activeColumnId = findColumnId(active.id.toString(), data);
@@ -115,25 +115,25 @@ export default function SortingContext({ children, data }: { children: ReactNode
     }
 
     const handleDragEnd = ({ active, over }: DragEndEvent) => {
-        if(over === null || over === undefined || activeId === null) return
+        if (over === null || over === undefined || activeId === null) return
 
         const activeData = active.data.current as DraggableData
         const overData = over.data.current as DroppableData
 
-        if(!overData.supports.includes(activeData.type)) return
-        
+        if (!overData.supports.includes(activeData.type)) return
+
         const overId = over.id.toString()
 
-        if(activeData.type === "item" && overData.type === "supply") {
+        if (activeData.type === "item" && overData.type === "supply") {
             dispatch(addSupply({ name: parseActiveItemId(activeId), index: parseInt(overId) }))
             setActiveId(null)
             setActiveType(null)
             return
         }
 
-        if(activeData.type === "item" && overData.type === "assembler") {
+        if (activeData.type === "item" && overData.type === "assembler") {
             const recipeName = parseActiveItemId(activeId)
-            if(!recipeList.some(r => r.name === recipeName)) return
+            if (!recipeList.some(r => r.name === recipeName)) return
 
             // will be undefined if dropped on new column button
             const columnId = findColumnId(overId, data)
@@ -152,7 +152,7 @@ export default function SortingContext({ children, data }: { children: ReactNode
             return
         }
 
-        if(overId.startsWith(NEW_PREFIX)) {
+        if (overId.startsWith(NEW_PREFIX)) {
             dispatch(moveAssembler({
                 oldColumnId: activeColumnId,
                 assemblerId: active.id.toString(),
@@ -194,12 +194,16 @@ export default function SortingContext({ children, data }: { children: ReactNode
             {children}
             <DragOverlay className="w-64" dropAnimation={{ duration: 250, easing: "ease" }}>
                 {activeType === "assembler" && activeAssemblerItem ? (
-                    <AssemblerCard key={activeAssemblerItem!.id} assembler={activeAssemblerItem!}>
+                    <AssemblerCard
+                        key={activeAssemblerItem!.id}
+                        size="sm"
+                        assembler={activeAssemblerItem}
+                    >
                         <DragHandle />
                     </AssemblerCard>
                 ) : activeType === "item" && activeId ? (
-                    <ItemBadge key={activeId} name={parseActiveItemId(activeId!)}/>
-                ) : null }
+                    <ItemBadge key={activeId} name={parseActiveItemId(activeId!)} />
+                ) : null}
             </DragOverlay>
         </DndContext>
     )

@@ -6,11 +6,11 @@ export default function SettingsPanel() {
     const dispatch = useAppDispatch()
 
     return (
-        <div className="flex gap-5 p-3">
+        <div className="flex flex-wrap p-3 gap-5 gap-y-3">
             <label className="flex gap-2 items-center">
                 <input
                     type="checkbox"
-                    className="bg-stone-400"
+                    className="bg-stone-400 accent-blue-400"
                     checked={settings?.showAaiIcons}
                     onChange={({ target }) => dispatch(setSettings({ showAaiIcons: target.checked }))}
                 />

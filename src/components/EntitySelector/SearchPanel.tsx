@@ -22,7 +22,7 @@ export default function SearchPanel<Type extends BaseEntity>({
     }, [])
 
     return (
-        <div>
+        <div className="p-1">
             <Input
                 ref={inputRef}
                 type="text"

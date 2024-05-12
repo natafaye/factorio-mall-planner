@@ -45,7 +45,7 @@ export default function AssemblerColumn({ columnId, className = "" }: Props) {
                 className={classNames(
                     className,
                     isOver ? "border-stone-500" : "border-stone-700",
-                    "rounded-md border w-64 flex-shrink-0 flex flex-col items-center"
+                    "rounded-md border w-56 flex-shrink-0 flex flex-col items-center"
                 )}
             >
                 <div className="flex gap-2 mt-2">
