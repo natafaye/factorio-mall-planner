@@ -1,6 +1,6 @@
 import type { RootState } from "../store"
-import type { BaseEntity, Recipe } from "../types"
-import { selectAllRecipes } from "./basicSelectors"
+import type { BaseEntity, Recipe } from "../../shared/types"
+import { selectAllItems, selectAllRecipes } from "./basicSelectors"
 import { createAppSelector } from "./createAppSelector"
 import { createAppSelectorHook } from "./createAppSelectorHook"
 
@@ -21,6 +21,16 @@ export const useSelectRecipesByName = createAppSelectorHook(createAppSelector(
     (allRecipes, names) => names
         .map(name => allRecipes.find(r => r.name === name))
         .filter(r => r) as Recipe[]
+))
+
+// Item By type
+
+export const useSelectItemsByType = createAppSelectorHook(createAppSelector(
+    [
+        selectAllItems,
+        (_, type: string) => type
+    ],
+    (allItems, type) => allItems.filter(i => i.type === type)
 ))
 
 // Groups

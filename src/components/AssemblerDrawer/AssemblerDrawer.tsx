@@ -6,8 +6,9 @@ import CollapsingDrawer from "../CollapsingDrawer"
 import EntitySelector from "../EntitySelector"
 import RecipeCard from "./RecipeCard"
 import { Button } from "../UI"
-import IngredientFilter from "./IngredientFilter"
+import { SimpleEntitySelector } from "../EntitySelector"
 import { calculateIngredientsInRecipes } from "./calculateIngredientsInRecipes"
+import ItemIcon from "../ItemIcon"
 
 export function AssemblerDrawer() {
     const [drawerRecipeNames, setDrawerRecipeNames] = useState<string[]>([])
@@ -53,11 +54,15 @@ export function AssemblerDrawer() {
                             {drawerRecipeNames.length} Recipes
                         </span>
                     </EntitySelector>
-                    <Button onClick={clearDrawer}><FontAwesomeIcon icon={faTrash} /></Button>
-                    <IngredientFilter
-                        options={drawerIngredients}
+                    <Button onClick={clearDrawer} aria-label="Clear Recipes"><FontAwesomeIcon icon={faTrash} /></Button>
+                    <SimpleEntitySelector
                         value={ingredientFilter}
                         onChange={setIngredientFilter}
+                        renderOptionLabel={(option) => (
+                            <><ItemIcon name={option.name} size="md" /> {option.count}</>
+                        )}
+                        options={drawerIngredients}
+                        emptyText="No Filter"
                     />
                 </div>
                 <div className="flex gap-2 overflow-x-auto py-3">

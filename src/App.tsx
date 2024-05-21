@@ -7,6 +7,7 @@ import RecipeListLoader from "./components/RecipeListLoader"
 import SettingsPanel from "./components/SettingsPanel"
 import AssemblerDrawer from "./components/AssemblerDrawer"
 import CollapsingDrawer from "./components/CollapsingDrawer"
+import BlueprintGenerator from "./components/BlueprintGenerator"
 
 export default function App() {
   const columnIds = useSelectColumnOrder()
@@ -28,6 +29,7 @@ export default function App() {
           </div>
           <CollapsingDrawer direction="down" className="bg-stone-900 flex flex-wrap">
             <RecipeListLoader />
+            <BlueprintGenerator/>
             <SettingsPanel />
           </CollapsingDrawer>
         </div>

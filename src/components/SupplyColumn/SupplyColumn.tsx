@@ -2,9 +2,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { addSupply, useSelectSupplyLineByIndex, removeSupply, useAppDispatch } from "../../redux"
 import ItemIcon from "../ItemIcon"
 import EntitySelector from "../EntitySelector"
-import { faAngleDown, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { useAppDroppable } from "../../shared/sorting"
 import classNames from "classnames"
+import ItemBadge from "../ItemBadge"
 
 export default function SupplyColumn({ index }: { index: number }) {
     const beltsInColumn = useSelectSupplyLineByIndex(index)
@@ -33,20 +34,16 @@ export default function SupplyColumn({ index }: { index: number }) {
                     <ItemIcon name="transport-belt"/>
                 </span>
             </EntitySelector>
-            <div className="flex gap-2 p-2">
+            <div className="flex flex-col gap-2 p-2">
                 {beltsInColumn.map(item => (
-                    <div key={item} className="bg-stone-600 flex flex-col items-center p-1">
+                    <div key={item} className="bg-stone-600 flex flex-col items-center p-2">
                         <button
                             onClick={() => dispatch(removeSupply({ name: item, index }))}
                             className="text-stone-500 font-bold hover:bg-stone-500 hover:text-stone-400 mb-2 p-1 py-0 rounded-sm"
                         >
                             &#x2715;
                         </button>
-                        <FontAwesomeIcon icon={faAngleDown} className="text-yellow-400" />
-                        <ItemIcon name={item} />
-                        <FontAwesomeIcon icon={faAngleDown} className="text-yellow-400" />
-                        <ItemIcon name={item} />
-                        <FontAwesomeIcon icon={faAngleDown} className="text-yellow-400" />
+                        <ItemBadge name={item}/>
                     </div>
                 ))}
             </div>

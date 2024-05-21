@@ -15,7 +15,7 @@ import ItemBadge from "../ItemBadge";
 import { useMultipleContainersCollisionDetection } from "./useMultipleContainersCollisionDetection";
 import { multipleContainersKeyboardCoordinateGetter } from "./multipleContainersKeyboardCoordinates";
 import { findColumnId } from "./findColumnId";
-import { ColumnsToAssemblers } from "../../redux/types";
+import { ColumnsToAssemblers } from "../../shared/types";
 import { DraggableData, DraggableType, DroppableData } from "../../shared/sorting";
 
 export const NEW_PREFIX = "NEW"

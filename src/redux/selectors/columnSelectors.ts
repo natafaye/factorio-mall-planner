@@ -1,8 +1,8 @@
 import { RootState } from "../store";
 import { createAppSelector } from "./createAppSelector";
 import { createAppSelectorHook } from "./createAppSelectorHook";
-import { selectAllAssemblers, selectAllRecipes, selectAllSupplyLines, selectColumnOrder } from "./basicSelectors";
-import { Assembler, AssemblerFullData, Recipe } from "../types";
+import { selectAllAssemblers, selectAllItems, selectAllRecipes, selectAllSupplyLines, selectColumnOrder } from "./basicSelectors";
+import { Assembler, AssemblerFullData, AssemblerWithRecipe, Recipe } from "../../shared/types";
 
 // Basic Selectors
 const selectColumnById = (state: RootState, columnId: string) => state.mall.columnToAssemblers[columnId]
@@ -13,6 +13,40 @@ const selectColumnToAssemblers = (state: RootState) => state.mall.columnToAssemb
 export const useSelectColumnById = createAppSelectorHook(selectColumnById)
 export const useSelectColumnOrder = createAppSelectorHook(selectColumnOrder)
 export const useSelectColumnToAssemblers = createAppSelectorHook(selectColumnToAssemblers)
+
+// Select Whole Mall
+export const useSelectMall = createAppSelectorHook(createAppSelector(
+    [
+        selectColumnOrder,
+        selectColumnToAssemblers,
+        selectAllAssemblers,
+        selectAllSupplyLines,
+        selectAllRecipes,
+        selectAllItems,
+    ],
+    (
+        columnOrder, columnToAssemblers, allAssemblers, 
+        supplyLines, allRecipes, allItems
+    ): { supplyLines: string[][], assemblerLines: AssemblerWithRecipe[][]} => ({
+        supplyLines,
+        assemblerLines: columnOrder.map(
+            columnId => columnToAssemblers[columnId].map(
+                assemblerId => {
+                    const assembler = allAssemblers[assemblerId]
+                    const recipe = allRecipes.find(recipe => recipe.name === assembler.recipeName)!
+                    const mainProduct = recipe.products[0]
+                    return { 
+                        ...assembler,
+                        recipe: {
+                            ...recipe,
+                            mainProduct: allItems.find(item => item.name === mainProduct.name)!
+                        }
+                    }
+                }
+            )
+        )
+    })
+))
 
 // Assembler By Id Selector Hook
 export const useSelectAssemblerById = createAppSelectorHook(createAppSelector(
@@ -25,9 +59,9 @@ export const useSelectAssemblerById = createAppSelectorHook(createAppSelector(
         selectAllSupplyLines,
     ],
     (assemblerId, columnToAssemblers, columnOrder, allAssemblers, allRecipes, supplyLines) => {
-        if(!assemblerId) return undefined
+        if (!assemblerId) return undefined
         const assembler = allAssemblers[assemblerId]
-        if(!assembler) return undefined
+        if (!assembler) return undefined
         const column = columnToAssemblers[assembler.columnId]
         const columnIndex = columnOrder.indexOf(assembler.columnId)
         return getAssemblerWithRecipeAndSatisfaction(
@@ -55,12 +89,12 @@ export const useSelectAssemblersInColumn = createAppSelectorHook(createAppSelect
 
 // Helper function for Assembler By Id and Assemblers In Column
 const getAssemblerWithRecipeAndSatisfaction = (
-    assembler: Assembler, 
+    assembler: Assembler,
     allAssemblers: Record<string, Assembler>,
-    column: string[], 
+    column: string[],
     columnIndex: number,
-    allRecipes: Recipe[], 
-    supplyLines: string[][], 
+    allRecipes: Recipe[],
+    supplyLines: string[][],
 ) => {
     const recipe = allRecipes.find(r => r.name === assembler.recipeName)
 

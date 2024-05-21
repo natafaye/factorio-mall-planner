@@ -1,5 +1,5 @@
 import { createAppSelectorHook } from "./createAppSelectorHook"
-import { RootState } from "../store"
+import { RootState } from "../types"
 
 export const selectColumnOrder = (state: RootState) => state.mall.columnOrder
 export const selectAllAssemblers = (state: RootState) => state.mall.assemblers
@@ -12,5 +12,9 @@ export const useSelectSettings = createAppSelectorHook(selectSettings)
 
 export const useSelectSupplyLineByIndex = createAppSelectorHook(
   (state, index: number) => state.mall.supplyLines[index]
+)
+
+export const useRecipeSourceFile = createAppSelectorHook(
+  (state) => state.recipes.sourceFile
 )
 

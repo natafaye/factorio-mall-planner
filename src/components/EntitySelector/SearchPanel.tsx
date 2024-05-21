@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react"
 import { useSelectBySearch } from "../../redux"
 import { Input } from "../UI"
-import type { BaseEntity } from "../../redux/types"
+import type { BaseEntity } from "../../shared/types"
 
 type Props<Type> = { 
     type: "item" | "recipe"

@@ -2,7 +2,7 @@ import { CSSProperties, ReactNode, forwardRef } from "react"
 import { useAppDispatch, removeAssembler } from "../../redux"
 import ItemBadge from "../ItemBadge"
 import ItemIcon from "../ItemIcon"
-import type { AssemblerFullData } from "../../redux/types"
+import type { AssemblerFullData } from "../../shared/types"
 
 type AssemblerProps = {
     assembler: AssemblerFullData

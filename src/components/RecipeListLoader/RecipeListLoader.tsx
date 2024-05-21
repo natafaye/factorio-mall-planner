@@ -1,61 +1,57 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { loadRecipes } from "../../redux";
-import { Button, FileInput } from "../UI";
-import { filterOutNonUseful } from "./filterOutNonUseful";
-import type { Item, Recipe } from "../../redux/types";
+import Instructions from "./Instructions";
+import FilePicker from "./FilePicker";
+import { Button, Modal } from "../UI";
+import { parseRecipes } from "./parseRecipes";
+import { loadRecipes, resetRecipes, setSourceFile, useAppDispatch } from "../../redux";
+import { useRecipeSourceFile } from "../../redux/selectors";
 
 export default function RecipeListLoader() {
-    const [file, setFile] = useState<File | null>(null)
-    const [statusMessage, setStatusMessage] = useState("")
+    const [modalOpen, setModalOpen] = useState(false)
     const [isError, setIsError] = useState(false)
 
-    const dispatch = useDispatch()
+    const file = useRecipeSourceFile()
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) setFile(event.target.files[0])
-    }
+    const [statusMessage, setStatusMessage] = useState(
+        file?.name === "Previous Data" ? "Reloaded recipe settings from previous session" : ""
+    )
 
-    const parseRecipes = () => {
+    const dispatch = useAppDispatch()
+    const handleSetFile = (file: File | null) => {
+        dispatch(setSourceFile(file))
         if (!file) {
-            setStatusMessage("You must select a file to parse")
-            setIsError(true)
-            return
-        }
-        try {
-            const fileReader = new FileReader()
-            fileReader.readAsText(file, "UTF-8")
-            fileReader.onload = (e) => {
-                if (e.target && typeof e.target.result === "string") {
-                    const { recipes, items } = JSON.parse(e.target.result)
-                    const usefulRecipes = filterOutNonUseful<Recipe>(recipes)
-                    const usefulItems = filterOutNonUseful<Item>(items)
-                    dispatch(loadRecipes({ 
-                        recipes: usefulRecipes, 
-                        items: usefulItems 
-                    }))
-                    setStatusMessage(
-                        `Loaded ${usefulRecipes.length} recipes and ${usefulItems.length
-                        } items, filtered out ${recipes.length - usefulRecipes.length
-                        } recipes and ${items.length - usefulItems.length} items`
-                    )
-                    setIsError(false)
-                } else {
-                    setStatusMessage("You must select a file to parse")
-                    setIsError(true)
+            dispatch(resetRecipes())
+            setStatusMessage("Reset recipes to default Factorio recipes")
+        } else {
+            parseRecipes(file, ({ data, error, message }) => {
+                if (data) {
+                    dispatch(loadRecipes(data))
                 }
-            }
-        } catch (error) {
-            setStatusMessage("There was an error parsing the file")
-            setIsError(true)
+                setIsError(error)
+                setStatusMessage(message)
+            })
         }
     }
 
     return (
-        <div className="p-4">
-            <FileInput accept=".json" onChange={handleChange} />
-            <Button onClick={parseRecipes}>Parse</Button>
-            <p className={"ps-2 " + (isError ? "text-red-300" : "text-green-300")}>{statusMessage}</p>
+        <div>
+            <Button onClick={() => setModalOpen(true)}>Customize Recipes</Button>
+            <Modal
+                isOpen={modalOpen}
+                title="Customize Recipes"
+                toggle={() => setModalOpen(!modalOpen)}
+            >
+                <p className="mb-4 -mt-2">If you're using mods or settings that add or change recipes,
+                    you can load in the exact recipe settings for your game.
+                </p>
+                <FilePicker onPick={handleSetFile} file={file} />
+                <p className={"mt-2 " + (isError ? "text-red-300" : "text-green-300")}>
+                    {statusMessage}
+                </p>
+                <div className="overflow-y-auto">
+                    <Instructions />
+                </div>
+            </Modal>
         </div>
     )
 }

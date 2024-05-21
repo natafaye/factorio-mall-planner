@@ -1,7 +1,7 @@
 import { CSS } from "@dnd-kit/utilities"
 import { AssemblerCard } from "./AssemblerCard"
 import DragHandle from "../DragHandle"
-import type { AssemblerFullData } from "../../redux/types"
+import type { AssemblerFullData } from "../../shared/types"
 import { useAppSortable } from "../../shared/sorting"
 
 export function SortableAssemblerCard({ assembler }: { assembler: AssemblerFullData }) {

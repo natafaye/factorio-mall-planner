@@ -8,7 +8,8 @@ const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>
                 ref={ref}
                 className={classNames(
                     className,
-                    "bg-stone-200 border-stone-400 border-1 text-stone-800 rounded-md p-2"
+                    "bg-stone-200 border-stone-400 border-1 text-stone-800 rounded-md p-2",
+                    "disabled:bg-stone-400 disabled:text-stone-600"
                 )}
                 {...props}
             />
