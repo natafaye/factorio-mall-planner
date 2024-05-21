@@ -4,9 +4,7 @@ import { useSelectItemsByType, useSelectMall } from "../../redux"
 import { Button, CopyBlock, Input } from "../UI"
 import { SimpleEntitySelector } from "../EntitySelector"
 
-type Props = {}
-
-export default function BlueprintForm({ }: Props) {
+export default function BlueprintForm() {
     const [blueprintString, setBlueprintString] = useState<string>("")
 
     const mall = useSelectMall()

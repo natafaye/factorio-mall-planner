@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import type { Recipe } from "../../redux"
+import type { Recipe } from "../../shared/types"
 import ItemBadge from "../ItemBadge"
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 

@@ -1,4 +1,4 @@
-import { Recipe } from "../../redux";
+import { Recipe } from "../../shared/types";
 
 export const calculateIngredientsInRecipes = (recipes: Recipe[]) => recipes.reduce(
     (ingredients: Array<{ name: string, count: number }>, recipe) => {

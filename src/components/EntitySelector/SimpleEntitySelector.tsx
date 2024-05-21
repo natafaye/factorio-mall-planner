@@ -53,7 +53,7 @@ export const SimpleEntitySelector: WithForwardRefProps = forwardRef(({
         if(key === "Escape") {
             setExpanded(false)
         } else if(key === "ArrowDown") {
-            let nextIndex = (index + 1 - emptyOffset < options.length) ? index + 1 : 0
+            const nextIndex = (index + 1 - emptyOffset < options.length) ? index + 1 : 0
             focusOption(nextIndex)
             onChange(allowEmpty ? 
                 nextIndex === 0 ? "" : 
@@ -61,7 +61,7 @@ export const SimpleEntitySelector: WithForwardRefProps = forwardRef(({
                 options[nextIndex].name
             )
         } else if(key === "ArrowUp") {
-            let prevIndex = (index - 1 >= 0) ? index - 1 : options.length - 1 + emptyOffset
+            const prevIndex = (index - 1 >= 0) ? index - 1 : options.length - 1 + emptyOffset
             focusOption(prevIndex)
             onChange(allowEmpty ? 
                 prevIndex === 0 ? "" : 

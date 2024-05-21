@@ -23,7 +23,7 @@ export const resetRecipes = (): AppThunk => (dispatch) => {
 // Initial State
 
 const localStorageData = localStorage.getItem("factorio-data")
-let loadedData: LoadedData = localStorageData ? JSON.parse(localStorageData) : DEFAULT_DATA
+const loadedData: LoadedData = localStorageData ? JSON.parse(localStorageData) : DEFAULT_DATA
 
 const initialState = {
   recipeList: loadedData.recipes,
