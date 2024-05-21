@@ -1,4 +1,4 @@
-import { Item, Recipe } from "../../redux"
+import { Item, Recipe } from "../../shared/types"
 import { filterOutNonUseful } from "./filterOutNonUseful"
 
 type ParseResults = {
