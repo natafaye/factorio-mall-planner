@@ -45,6 +45,7 @@ export default function FilePicker({ onPick, file }: Props) {
                             "bg-stone-700"
                     )} 
                     style={{ 
+                        // eslint-disable-next-line
                         ["--border-dash-color" as any]: 
                             isDragAccept || file ? 
                                 "#22c55e" : // green-500

@@ -15,7 +15,7 @@ export default function BlueprintForm() {
     const pipes = useSelectItemsByType("pipe")
     const poles = useSelectItemsByType("electric-pole")
     const lamps = useSelectItemsByType("lamp")
-    const modules = useSelectItemsByType("module")
+    //const modules = useSelectItemsByType("module")
     const logisticContainers = useSelectItemsByType("logistic-container")
     const roboports = useSelectItemsByType("roboport")
 

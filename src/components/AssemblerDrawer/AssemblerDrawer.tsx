@@ -17,6 +17,7 @@ export function AssemblerDrawer() {
     // Ingredient Filtering
     const drawerIngredients = useMemo(
         () => calculateIngredientsInRecipes(drawerRecipes),
+        // eslint-disable-next-line
         [drawerRecipeNames]
     )
     const [ingredientFilter, setIngredientFilter] = useState("")

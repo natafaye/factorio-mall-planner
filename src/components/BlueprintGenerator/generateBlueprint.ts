@@ -1,5 +1,5 @@
 import Blueprint from "factorio-blueprint"
-import { Assembler } from "../../redux"
+import { Assembler } from "../../shared/types"
 import { AssemblerWithRecipe } from "../../shared/types"
 
 export const LIMIT_METHODS = ["Logistics", "Circuits", "Restrict Slots", "None"] as const

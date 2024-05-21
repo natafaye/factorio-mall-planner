@@ -1,7 +1,7 @@
 import { MouseEvent, useRef, useState } from "react";
 import classNames from "classnames";
 import { useSelectInGroup, useSelectGroups } from "../../redux";
-import type { BaseEntity } from "../../redux";
+import type { BaseEntity } from "../../shared/types";
 import { Button } from "../UI";
 import ItemIcon from "../ItemIcon";
 import SearchPanel from "./SearchPanel";

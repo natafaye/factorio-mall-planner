@@ -1,5 +1,5 @@
 import classNames from "classnames"
-import { BaseEntity } from "../../redux"
+import { BaseEntity } from "../../shared/types"
 import ItemIcon from "../ItemIcon"
 import { HTMLAttributes } from "react"
 
