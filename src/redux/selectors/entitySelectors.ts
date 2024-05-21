@@ -1,4 +1,4 @@
-import type { RootState } from "../store"
+import type { RootState } from "../types"
 import type { BaseEntity, Recipe } from "../../shared/types"
 import { selectAllItems, selectAllRecipes } from "./basicSelectors"
 import { createAppSelector } from "./createAppSelector"

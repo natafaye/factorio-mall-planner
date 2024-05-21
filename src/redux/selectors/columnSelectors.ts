@@ -1,4 +1,4 @@
-import { RootState } from "../store";
+import { RootState } from "../types";
 import { createAppSelector } from "./createAppSelector";
 import { createAppSelectorHook } from "./createAppSelectorHook";
 import { selectAllAssemblers, selectAllItems, selectAllRecipes, selectAllSupplyLines, selectColumnOrder } from "./basicSelectors";

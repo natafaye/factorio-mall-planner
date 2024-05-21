@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { RootState } from "../store"
+import { RootState } from "../types"
 
 // Taken from Reselect Documentation
 // https://reselect.js.org/FAQ#how-can-i-make-a-curried-selector

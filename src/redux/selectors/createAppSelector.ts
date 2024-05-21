@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { UnknownMemoizer, weakMapMemoize, Selector } from "reselect"
-import { RootState } from "../store"
+import { RootState } from "../types"
 
 // Taken from Reselect Documentation
 // https://reselect.js.org/FAQ#how-can-i-make-a-pre-typed-version-of-createselector-for-my-root-state
