@@ -47,7 +47,7 @@ export function AssemblerDrawer() {
                 <div className="flex items-stretch">
                     <EntitySelector multi
                         onChange={handleSelectorChange}
-                        type="recipe"
+                        entityType="recipe"
                         selected={drawerRecipeNames}
                     >
                         <span className="text-nowrap flex items-center gap-2">

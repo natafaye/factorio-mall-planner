@@ -1,0 +1,6 @@
+
+.beltBackground {
+    background-image: url(../../assets/belt-background.svg);
+    background-repeat: repeat-y;
+    background-size: contain;
+}

@@ -32,11 +32,12 @@ export const SimpleEntitySelector: WithForwardRefProps = forwardRef(({
 
     const listId = useRef(id ? `list-${id}` : `list-${uuid()}`)
     const emptyOffset = allowEmpty ? 1 : 0
-    const listRef = useRef<HTMLUListElement>(null)
 
-    useClickOutside(listRef, () => setExpanded(false))
+    const divRef = useRef<HTMLDivElement>(null)
+    useClickOutside(divRef, () => setExpanded(false))
 
     // Handle focusing
+    const listRef = useRef<HTMLUListElement>(null)
     const focusOption = (index: number) => {
         if (listRef.current && listRef.current.childNodes[index]) {
             (listRef.current.childNodes[index] as HTMLButtonElement).focus()
@@ -78,6 +79,7 @@ export const SimpleEntitySelector: WithForwardRefProps = forwardRef(({
 
     return (
         <div 
+            ref={divRef}
             className="relative m-1"
         >
             <button

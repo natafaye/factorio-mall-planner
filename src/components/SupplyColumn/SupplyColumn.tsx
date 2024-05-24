@@ -1,52 +1,33 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { addSupply, useSelectSupplyLineByIndex, removeSupply, useAppDispatch } from "../../redux"
-import ItemIcon from "../ItemIcon"
-import EntitySelector from "../EntitySelector"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
-import { useAppDroppable } from "../../shared/sorting"
 import classNames from "classnames"
-import ItemBadge from "../ItemBadge"
+import { useSelectSupplyLineByIndex } from "../../redux"
+import styles from "./SupplyColumn.module.css"
+import BeltSpot from "./BeltSpot"
+import { useTransition, animated, config } from "@react-spring/web"
 
 export default function SupplyColumn({ index }: { index: number }) {
     const beltsInColumn = useSelectSupplyLineByIndex(index)
 
-    const dispatch = useAppDispatch()
-
-    const { setNodeRef, isOver } = useAppDroppable({
-        id: index,
-        data: {
-            type: "supply",
-            supports: ["item"]
-        }
+    const transitionedBelts = useTransition(beltsInColumn, {
+        keys: (item) => item[2],
+        from: { transform: 'translateX(-1.5rem) scaleX(0)', opacity: 0, width: '3.5rem' },
+        enter: { transform: 'translateX(0) scaleX(1)', opacity: 1, width: '3.5rem' },
+        leave: { transform: 'translateX(-1.5rem) scaleX(0.5)', opacity: 0, width: '0rem' },
+        config: config.stiff
     })
 
     return (
-        <div ref={setNodeRef} className={classNames(
-            "flex flex-col items-center border border-1 rounded-md pt-2 min-w-32",
-            isOver ? "border-stone-500" : "border-stone-700"
-        )}>
-            <EntitySelector
-                type="item"
-                onChange={(name) => dispatch(addSupply({ name, index }))}
-            >
-                <span className="inline-flex items-center gap-2">
-                    <FontAwesomeIcon icon={faPlus}/>
-                    <ItemIcon name="transport-belt"/>
-                </span>
-            </EntitySelector>
-            <div className="flex flex-col gap-2 p-2">
-                {beltsInColumn.map(item => (
-                    <div key={item} className="bg-stone-600 flex flex-col items-center p-2">
-                        <button
-                            onClick={() => dispatch(removeSupply({ name: item, index }))}
-                            className="text-stone-500 font-bold hover:bg-stone-500 hover:text-stone-400 mb-2 p-1 py-0 rounded-sm"
-                        >
-                            &#x2715;
-                        </button>
-                        <ItemBadge name={item}/>
+        <div className="flex items-stretch">
+            {transitionedBelts((style, belt, _, index2) => (
+                <animated.div key={belt[2]} style={style} className="flex">
+                    <div className={classNames(
+                        "bg-[#3B3734] p-1 pt-8 flex flex-col gap-6 flex-grow w-12 ms-2",
+                        styles.beltBackground
+                    )}>
+                        <BeltSpot item={belt[0]} index={[index, index2, 0]} />
+                        <BeltSpot item={belt[1]} index={[index, index2, 1]} />
                     </div>
-                ))}
-            </div>
+                </animated.div>
+            ))}
         </div>
     )
 }

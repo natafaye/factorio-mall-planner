@@ -1,4 +1,4 @@
-import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable"
+import { SortableContext, rectSortingStrategy, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import {
     useAppDispatch, addAssembler,
     removeColumn,
@@ -39,18 +39,18 @@ export default function AssemblerColumn({ columnId, className = "" }: Props) {
     })
 
     return (
-        <SortableContext items={assemblerIdsInColumn} strategy={rectSortingStrategy}>
+        <SortableContext items={assemblerIdsInColumn} strategy={verticalListSortingStrategy}>
             <div
                 ref={setNodeRef}
                 className={classNames(
                     className,
                     isOver ? "border-stone-500" : "border-stone-700",
-                    "rounded-md border w-56 flex-shrink-0 flex flex-col items-center"
+                    "rounded-md border w-56 flex-shrink-0 flex flex-col justify-stretch items-center"
                 )}
             >
                 <div className="flex gap-2 mt-2">
                     <EntitySelector
-                        type="recipe"
+                        entityType="recipe"
                         onChange={
                             (recipeName) => dispatch(addAssembler({ recipeName, columnId }))
                         }
@@ -69,15 +69,13 @@ export default function AssemblerColumn({ columnId, className = "" }: Props) {
                     </Button>
                 </div>
                 {missingIngredients.length > 0 &&
-                    <>
-                        <div className="flex flex-wrap gap-2 mt-3 bg-red-900 p-3 w-full justify-center">
-                            {missingIngredients.map(i => i && (
-                                <ItemBadge key={i.name} name={i.name} />
-                            ))}
-                        </div>
-                    </>
+                    <div className="flex flex-wrap gap-2 mt-3 bg-red-900 p-3 w-full justify-center">
+                        {missingIngredients.map(i => i && (
+                            <ItemBadge key={i.name} name={i.name} />
+                        ))}
+                    </div>
                 }
-                <div className="overflow-auto">
+                <div className="overflow-auto flex-grow w-full">
                     {assemblersInColumn.map(assembler => (
                         <SortableAssemblerCard key={assembler.id} assembler={assembler} />
                     ))}

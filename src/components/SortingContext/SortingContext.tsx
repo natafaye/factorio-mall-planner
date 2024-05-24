@@ -7,7 +7,8 @@ import {
     useAppDispatch, useSelectAssemblerById, moveAssembler, replaceAllColumns,
     addSupply,
     addAssembler,
-    useSelectAllRecipes
+    useSelectAllRecipes,
+    swapSupply
 } from "../../redux";
 import { AssemblerCard } from "../AssemblerCard";
 import DragHandle from "../DragHandle";
@@ -22,6 +23,11 @@ export const NEW_PREFIX = "NEW"
 
 const parseActiveItemId = (id: UniqueIdentifier) => {
     return id.toString().split("+")[0]
+}
+
+const parseSupplyId = (id: string): [number, number, number] => {
+    const index = id.split("-")
+    return [parseInt(index[0]), parseInt(index[1]), parseInt(index[2])]
 }
 
 export default function SortingContext({ children, data }: { children: ReactNode, data: ColumnsToAssemblers }) {
@@ -124,8 +130,23 @@ export default function SortingContext({ children, data }: { children: ReactNode
 
         const overId = over.id.toString()
 
-        if (activeData.type === "item" && overData.type === "supply") {
-            dispatch(addSupply({ name: parseActiveItemId(activeId), index: parseInt(overId) }))
+        if (activeData.type === "item" && (
+                overData.type === "supply" || (overData.type === "belt-spot" && !activeData.location)
+            )
+        ) {
+            if(!overData.location) return
+            dispatch(addSupply({ name: parseActiveItemId(activeId), index: overData.location }))
+            setActiveId(null)
+            setActiveType(null)
+            return
+        }
+
+        if(activeData.type === "item" && overData.type === "belt-spot" && activeData.location) {
+            if(!overData.location) return
+            dispatch(swapSupply({ 
+                startIndex: activeData.location, 
+                endIndex: overData.location 
+            }))
             setActiveId(null)
             setActiveType(null)
             return
@@ -192,7 +213,7 @@ export default function SortingContext({ children, data }: { children: ReactNode
             onDragEnd={handleDragEnd}
         >
             {children}
-            <DragOverlay className="w-64" dropAnimation={{ duration: 250, easing: "ease" }}>
+            <DragOverlay className="w-64" dropAnimation={null}>
                 {activeType === "assembler" && activeAssemblerItem ? (
                     <AssemblerCard
                         key={activeAssemblerItem!.id}

@@ -4,6 +4,13 @@ import type { Assembler, ColumnsToAssemblers} from '../../shared/types'
 
 type NewAssemblerData = Omit<Assembler, "id" | "columnId"> & { columnId?: string }
 
+// Last index is id for belt
+type Belt = [string | undefined, string | undefined, string]
+
+type SupplyIndex = [number, number, number]
+
+const getEmptyBelt = (): Belt => [undefined, undefined, uuid()]
+
 /***** Initial State *****/
 
 const starterId1 = uuid()
@@ -12,14 +19,14 @@ const initialState: {
     columnOrder: string[]
     columnToAssemblers: ColumnsToAssemblers
     assemblers: Record<string, Assembler>
-    supplyLines: Array<string[]>
+    supplyLines: Belt[][]
 } = {
     columnOrder: [starterId1],
     columnToAssemblers: {
         [starterId1]: [],
     },
     assemblers: {},
-    supplyLines: [[], []],
+    supplyLines: [[getEmptyBelt()], [getEmptyBelt()]],
 }
 
 
@@ -39,7 +46,7 @@ export const mallSlice = createSlice({
                 state.columnToAssemblers[newColumnId] = []
                 state.columnOrder.push(newColumnId)
                 // Create the supply line
-                state.supplyLines.push([])
+                state.supplyLines.push([getEmptyBelt()])
             }
             const newAssembler = {
                 id: uuid(),
@@ -72,7 +79,7 @@ export const mallSlice = createSlice({
                 state.columnToAssemblers[newColumnId] = []
                 state.columnOrder.push(newColumnId)
                 // Create the supply line
-                state.supplyLines.push([])
+                state.supplyLines.push([getEmptyBelt()])
             }
 
             state.columnToAssemblers[newColumnId] = [
@@ -95,10 +102,10 @@ export const mallSlice = createSlice({
             const newColumnId = uuid()
             state.columnToAssemblers[newColumnId] = []
             state.columnOrder.push(newColumnId)
-            state.supplyLines.push([])
+            state.supplyLines.push([getEmptyBelt()])
         },
         removeColumn: (state, action: PayloadAction<string>) => {
-            const columnIndex = state.columnOrder.indexOf(action.payload)
+            const lineIndex = state.columnOrder.indexOf(action.payload)
             // Remove contained assemblers
             state.columnToAssemblers[action.payload].forEach(
                 assemblerId => delete state.assemblers[assemblerId]
@@ -107,25 +114,60 @@ export const mallSlice = createSlice({
             // If this is the only column left, stop there
             if (state.columnOrder.length === 1) return
             // Merge surrounding supply lines
-            const lineAfter = state.supplyLines[columnIndex + 1]
-            state.supplyLines[columnIndex].push(...lineAfter)
-            state.supplyLines.splice(columnIndex + 1, 1)
+            const lineAfter = state.supplyLines[lineIndex + 1]
+            // Remove empty last belt from earlier line
+            state.supplyLines[lineIndex].pop()
+            // Push the belts from the later line
+            state.supplyLines[lineIndex].push(...lineAfter)
+            state.supplyLines.splice(lineIndex + 1, 1)
             // Remove column
             delete state.columnToAssemblers[action.payload]
-            state.columnOrder.splice(columnIndex, 1)
+            state.columnOrder.splice(lineIndex, 1)
         },
 
         // Supply Lines
-        addSupply: (state, action: PayloadAction<{ name: string, index: number }>) => {
-            const { name, index } = action.payload
-            // Don't add a repeat
-            if(state.supplyLines[index].includes(name)) return
-            state.supplyLines[index].push(name)
+        addSupply: (state, action: PayloadAction<{ name: string, index: SupplyIndex }>) => {
+            const { name, index: [lineIndex, beltIndex, itemIndex] } = action.payload
+            const line = state.supplyLines[lineIndex]
+            line[beltIndex][itemIndex] = name
+            // if we just added something to the last belt, add another belt
+            if(beltIndex === line.length - 1) {
+                line.push(getEmptyBelt())
+            }
         },
-        removeSupply: (state, action: PayloadAction<{ name: string, index: number }>) => {
-            const { name, index } = action.payload
-            const nameIndex = state.supplyLines[index].indexOf(name)
-            state.supplyLines[index].splice(nameIndex, 1)
+        removeSupply: (state, action: PayloadAction<{ index: SupplyIndex }>) => {
+            const { index: [lineIndex, beltIndex, itemIndex] } = action.payload
+            const line = state.supplyLines[lineIndex]
+            const belt = line[beltIndex]
+            belt[itemIndex] = undefined
+            // if this belt has become empty and it's not the last belt, delete it
+            if(!belt[0] && !belt[1] && beltIndex !== line.length - 1) {
+                line.splice(beltIndex, 1)
+            }
+        },
+        swapSupply: (state, action: PayloadAction<{ startIndex: SupplyIndex, endIndex: SupplyIndex}>) => {
+            const { 
+                startIndex: [startLineIndex, startBeltIndex, startItemIndex], 
+                endIndex: [endLineIndex, endBeltIndex, endItemIndex]
+            } = action.payload
+            const startLine = state.supplyLines[startLineIndex]
+            const startBelt = startLine[startBeltIndex]
+            const startItem = startBelt[startItemIndex]
+            const endLine = state.supplyLines[endLineIndex]
+            const endBelt = endLine[endBeltIndex]
+
+            // Swap the items
+            endBelt[endItemIndex] = startItem
+            startBelt[startItemIndex] = undefined
+
+            // If we added something to a last belt, add a new belt on the end
+            if(endBeltIndex === endLine.length - 1) {
+                endLine.push(getEmptyBelt())
+            }
+            // If we cleared a belt that's not the last belt, remove it
+            if(!startBelt[0] && !startBelt[1] && startBeltIndex !== startLine.length - 1) {
+                startLine.splice(startBeltIndex, 1)
+            }
         }
 
     },
@@ -135,5 +177,5 @@ export const mallReducer = mallSlice.reducer
 export const {
     addAssembler, removeAssembler, moveAssembler,
     replaceAllColumns, addColumn, removeColumn,
-    addSupply, removeSupply,
+    addSupply, removeSupply, swapSupply
 } = mallSlice.actions

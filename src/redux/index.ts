@@ -15,7 +15,8 @@ export {
     addColumn,
     removeColumn,
     addSupply, 
-    removeSupply 
+    removeSupply,
+    swapSupply,
 } from "./slices/mallSlice"
 
 export { 

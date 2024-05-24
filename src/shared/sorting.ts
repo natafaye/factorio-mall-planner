@@ -5,11 +5,13 @@ export type DraggableType = "item" | "assembler"
 
 export type DraggableData = {
     type: DraggableType
+    location?: [number, number, number]
 }
 
 export type DroppableData = {
-    type: "supply" | "assembler"
+    type: "belt-spot" | "supply" | "assembler"
     supports: DraggableType[]
+    location?: [number, number, number]
 }
 
 export type SortableData = DraggableData & DroppableData

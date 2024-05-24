@@ -121,6 +121,11 @@ const createAssembler = ({
             right: assembler.recipe.mainProduct.stackSize * stackLimit,
             type: limitMethod === "Logistics" ? "logistic" : "circuit"
         })
+        containerBP.setRequestFilter(
+            1, 
+            assembler.recipe.mainProduct.name, 
+            assembler.recipe.mainProduct.stackSize * containerBP.INVENTORY_SIZE
+        )
     }
 }
 
