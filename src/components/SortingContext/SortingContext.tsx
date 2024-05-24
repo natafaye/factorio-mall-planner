@@ -25,10 +25,10 @@ const parseActiveItemId = (id: UniqueIdentifier) => {
     return id.toString().split("+")[0]
 }
 
-const parseSupplyId = (id: string): [number, number, number] => {
-    const index = id.split("-")
-    return [parseInt(index[0]), parseInt(index[1]), parseInt(index[2])]
-}
+// const parseSupplyId = (id: string): [number, number, number] => {
+//     const index = id.split("-")
+//     return [parseInt(index[0]), parseInt(index[1]), parseInt(index[2])]
+// }
 
 export default function SortingContext({ children, data }: { children: ReactNode, data: ColumnsToAssemblers }) {
     // State

@@ -1,4 +1,4 @@
-import { SortableContext, rectSortingStrategy, verticalListSortingStrategy } from "@dnd-kit/sortable"
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import {
     useAppDispatch, addAssembler,
     removeColumn,

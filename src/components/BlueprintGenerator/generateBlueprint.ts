@@ -1,12 +1,11 @@
 import Blueprint from "factorio-blueprint"
-import { Assembler } from "../../shared/types"
-import { AssemblerWithRecipe } from "../../shared/types"
+import type { Assembler, Belt, AssemblerWithRecipe } from "../../shared/types"
 
 export const LIMIT_METHODS = ["Logistics", "Circuits", "Restrict Slots", "None"] as const
 
 type GenerateBlueprintProps = {
     mall: {
-        supplyLines: string[][]
+        supplyLines: Belt[][]
         assemblerLines: AssemblerWithRecipe[][]
     }
     settings: {
@@ -33,14 +32,14 @@ export const generateBlueprint = ({ mall, settings }: GenerateBlueprintProps) =>
     // Supply lines
     let x = 0
     mall.supplyLines.forEach((line) => {
-        for (let i = 0; i < line.length; i += 2) {
-            // Label lines with filter inserter
+        line.forEach(belt => {
+            // Label belts with filter inserter
             const filterInserter = blueprint.createEntity('filter-inserter', { x, y: 0 })
-            filterInserter.filters = line.length > i + 1 ? [line[i], line[i + 1]] : [line[i]]
+            filterInserter.filters = [belt[0], belt[1]].filter(i => i) as string[]
             for (let y = 1; y < height; y++)
                 blueprint.createEntity(types.belt, { x, y }, Blueprint.DOWN)
             x++
-        }
+        })
         x += 5
     })
 
@@ -130,7 +129,7 @@ const createAssembler = ({
 }
 
 const getDimensions = ({ supplyLines, assemblerLines }: {
-    supplyLines: string[][]
+    supplyLines: Belt[][]
     assemblerLines: Assembler[][]
 }) => {
     const longestAssemblerLineLength = assemblerLines.reduce(

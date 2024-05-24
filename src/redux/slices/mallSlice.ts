@@ -1,11 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { v4 as uuid } from "uuid"
-import type { Assembler, ColumnsToAssemblers} from '../../shared/types'
+import type { Assembler, Belt, ColumnsToAssemblers} from '../../shared/types'
 
 type NewAssemblerData = Omit<Assembler, "id" | "columnId"> & { columnId?: string }
-
-// Last index is id for belt
-type Belt = [string | undefined, string | undefined, string]
 
 type SupplyIndex = [number, number, number]
 

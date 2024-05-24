@@ -1,8 +1,9 @@
 import { RootState } from "../types";
 import { createAppSelector } from "./createAppSelector";
 import { createAppSelectorHook } from "./createAppSelectorHook";
-import { selectAllAssemblers, selectAllItems, selectAllRecipes, selectAllSupplyLines, selectColumnOrder } from "./basicSelectors";
-import { Assembler, AssemblerFullData, AssemblerWithRecipe, Recipe } from "../../shared/types";
+import { selectAllAssemblers, selectAllItems, selectAllRecipes, 
+    selectAllSupplyLines, selectColumnOrder } from "./basicSelectors";
+import type { Assembler, AssemblerFullData, AssemblerWithRecipe, Belt, Recipe } from "../../shared/types";
 
 // Basic Selectors
 const selectColumnById = (state: RootState, columnId: string) => state.mall.columnToAssemblers[columnId]
@@ -27,7 +28,7 @@ export const useSelectMall = createAppSelectorHook(createAppSelector(
     (
         columnOrder, columnToAssemblers, allAssemblers, 
         supplyLines, allRecipes, allItems
-    ): { supplyLines: string[][], assemblerLines: AssemblerWithRecipe[][]} => ({
+    ): { supplyLines: Belt[][], assemblerLines: AssemblerWithRecipe[][]} => ({
         supplyLines,
         assemblerLines: columnOrder.map(
             columnId => columnToAssemblers[columnId].map(
@@ -94,7 +95,7 @@ const getAssemblerWithRecipeAndSatisfaction = (
     column: string[],
     columnIndex: number,
     allRecipes: Recipe[],
-    supplyLines: string[][],
+    supplyLines: Belt[][],
 ) => {
     const recipe = allRecipes.find(r => r.name === assembler.recipeName)
 
@@ -112,7 +113,7 @@ const getAssemblerWithRecipeAndSatisfaction = (
             ...recipe,
             ingredients: recipe.ingredients.map(ingredient => ({
                 ...ingredient,
-                satisfied: adjacentSupplyLineItems.some(item => item === ingredient.name)
+                satisfied: adjacentSupplyLineItems.some(belt => belt.some(item => item === ingredient.name))
                     || adjacentAssemblerRecipes.some(r => r?.products.some(p => p.name === ingredient.name))
             }))
         }

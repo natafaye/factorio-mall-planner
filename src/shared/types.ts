@@ -42,3 +42,6 @@ export type AssemblerFullData = Assembler & {
         }>
     }
 }
+
+// Last index is id for belt
+export type Belt = [string | undefined, string | undefined, string]
