@@ -9,7 +9,7 @@ import { useClickOutside } from "./useClickOutside"
 type Props<OptionType> = {
     options: Array<OptionType>
     value: string
-    onChange: (name: string) => void
+    onSelectChange: (name: string) => void
     emptyText?: string
     renderOptionLabel?: (option: OptionType) => ReactNode
     allowEmpty?: boolean
@@ -23,7 +23,7 @@ interface WithForwardRefProps extends React.FC<Props<{ name: string }>> {
 }
 
 export const SimpleEntitySelector: WithForwardRefProps = forwardRef(({ 
-    options, value, onChange, 
+    options, value, onSelectChange, 
     renderOptionLabel, 
     allowEmpty = true, emptyText = "None",
     id, name, tabIndex = 0
@@ -56,7 +56,7 @@ export const SimpleEntitySelector: WithForwardRefProps = forwardRef(({
         } else if(key === "ArrowDown") {
             const nextIndex = (index + 1 - emptyOffset < options.length) ? index + 1 : 0
             focusOption(nextIndex)
-            onChange(allowEmpty ? 
+            onSelectChange(allowEmpty ? 
                 nextIndex === 0 ? "" : 
                     options[nextIndex - 1].name : 
                 options[nextIndex].name
@@ -64,7 +64,7 @@ export const SimpleEntitySelector: WithForwardRefProps = forwardRef(({
         } else if(key === "ArrowUp") {
             const prevIndex = (index - 1 >= 0) ? index - 1 : options.length - 1 + emptyOffset
             focusOption(prevIndex)
-            onChange(allowEmpty ? 
+            onSelectChange(allowEmpty ? 
                 prevIndex === 0 ? "" : 
                     options[prevIndex - 1].name : 
                 options[prevIndex].name
@@ -73,7 +73,7 @@ export const SimpleEntitySelector: WithForwardRefProps = forwardRef(({
     }
 
     const handleClickSelect = (name: string) => {
-        onChange(name)
+        onSelectChange(name)
         setExpanded(false)
     }
 

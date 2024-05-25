@@ -28,7 +28,7 @@ export default function EmptyBeltSpot({ index }: Props) {
         <div className="h-20" ref={setNodeRef}>
             <EntitySelector
                 entityType="item"
-                onChange={(name) => dispatch(addSupply({ name, index }))}
+                onSelectChange={(name) => dispatch(addSupply({ name, index }))}
                 as="button"
                 className={classNames(
                     "rounded text-center w-full hover:bg-stone-500 transition-all",

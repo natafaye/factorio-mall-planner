@@ -1,4 +1,5 @@
-import { ElementType, MouseEvent, ReactNode, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import type { ComponentPropsWithoutRef, ElementType, MouseEvent, PropsWithChildren } from "react"
 import classNames from "classnames";
 import { useSelectInGroup, useSelectGroups } from "../../redux";
 import type { BaseEntity } from "../../shared/types";
@@ -9,25 +10,26 @@ import EntityButton from "./EntityButton";
 import { useClickOutside } from "./useClickOutside";
 import styles from "./EntitySelector.module.css"
 
-type BaseProps<T> = {
+type BaseProps<T extends ElementType> = PropsWithChildren<ComponentPropsWithoutRef<T> & {
     entityType: "recipe" | "item"
-    selected?: string[]
     as?: T
-}
+}>
 
-type Props<T> = BaseProps<T> & {
+type Props<T extends ElementType> = BaseProps<T> & {
     multi?: false
-    onChange: (entityName: string) => void
+    selected?: string
+    onSelectChange: (entityName: string) => void
 }
 
-type MultiProps<T> = BaseProps<T> & {
+type MultiProps<T extends ElementType> = BaseProps<T> & {
     multi: true
-    onChange: (entityNames: string[]) => void
+    selected?: string[]
+    onSelectChange: (entityNames: string[]) => void
 }
 
-export default function EntitySelector<T extends ElementType<{ onClick: () => void, children: ReactNode }>>({
-    entityType, onChange, children, multi, selected = [], as, ...props
-}: Omit<React.ComponentPropsWithoutRef<T>, keyof (Props<T> | MultiProps<T>)> & (Props<T> | MultiProps<T>)) {
+export default function EntitySelector<T extends ElementType>({
+    entityType, onSelectChange, children, selected = [], multi, as, ...props
+}: Props<T> | MultiProps<T>) {
     const [showMenu, setShowMenu] = useState(false)
 
     const toggleMenu = () => setShowMenu(!showMenu)
@@ -51,11 +53,11 @@ export default function EntitySelector<T extends ElementType<{ onClick: () => vo
             const newIndex = entitiesInGroup.indexOf(entity)
             const startIndex = Math.min(lastIndex, newIndex)
             const endIndex = Math.max(lastIndex, newIndex)
-            onChange(entitiesInGroup.slice(startIndex + 1, endIndex + 1).map(e => e.name))
+            onSelectChange(entitiesInGroup.slice(startIndex + 1, endIndex + 1).map(e => e.name))
         } else if (multi) {
-            onChange([entity.name])
+            onSelectChange([entity.name])
         } else {
-            onChange(entity.name)
+            onSelectChange(entity.name)
         }
         lastSelectedEntity.current = entity
         if (!multi) setShowMenu(false)

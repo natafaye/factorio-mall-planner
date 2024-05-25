@@ -90,7 +90,7 @@ export default function BlueprintForm() {
                         <label className="p-2 me-4 w-36">Belt Type</label>
                         <SimpleEntitySelector
                             value={values.belt}
-                            onChange={(value) => handleSelectorChange("belt", value)}
+                            onSelectChange={(value) => handleSelectorChange("belt", value)}
                             options={belts}
                             allowEmpty={false}
                         />
@@ -99,7 +99,7 @@ export default function BlueprintForm() {
                         <label className="p-2 me-4 w-36">Container Type</label>
                         <SimpleEntitySelector
                             value={values.container}
-                            onChange={(value) => handleSelectorChange("container", value)}
+                            onSelectChange={(value) => handleSelectorChange("container", value)}
                             options={values.limitMethod === "Logistics" ?
                                 [...logisticContainers, ...containers] :
                                 containers
@@ -111,7 +111,7 @@ export default function BlueprintForm() {
                         <label className="p-2 me-4 w-36">Inserter Type</label>
                         <SimpleEntitySelector
                             value={values.inserter}
-                            onChange={(value) => handleSelectorChange("inserter", value)}
+                            onSelectChange={(value) => handleSelectorChange("inserter", value)}
                             options={inserters}
                             allowEmpty={false}
                         />
@@ -120,7 +120,7 @@ export default function BlueprintForm() {
                         <label className="p-2 me-4 w-36">Assembler Type</label>
                         <SimpleEntitySelector
                             value={values.assembler}
-                            onChange={(value) => handleSelectorChange("assembler", value)}
+                            onSelectChange={(value) => handleSelectorChange("assembler", value)}
                             options={assemblers}
                             allowEmpty={false}
                         />
@@ -129,7 +129,7 @@ export default function BlueprintForm() {
                         <label className="p-2 me-4 w-36">Electric Pole Type</label>
                         <SimpleEntitySelector
                             value={values.pole}
-                            onChange={(value) => handleSelectorChange("pole", value)}
+                            onSelectChange={(value) => handleSelectorChange("pole", value)}
                             options={poles}
                         />
                     </div>
@@ -137,7 +137,7 @@ export default function BlueprintForm() {
                         <label className="p-2 me-4 w-36">Lamp Type</label>
                         <SimpleEntitySelector
                             value={values.lamp}
-                            onChange={(value) => handleSelectorChange("lamp", value)}
+                            onSelectChange={(value) => handleSelectorChange("lamp", value)}
                             options={lamps}
                         />
                     </div>
@@ -145,7 +145,7 @@ export default function BlueprintForm() {
                         <label className="p-2 me-4 w-36">Pipe Type</label>
                         <SimpleEntitySelector
                             value={values.pipe}
-                            onChange={(value) => handleSelectorChange("pipe", value)}
+                            onSelectChange={(value) => handleSelectorChange("pipe", value)}
                             options={pipes}
                             allowEmpty={false}
                         />
@@ -154,7 +154,7 @@ export default function BlueprintForm() {
                         <label className="p-2 me-4 w-36">Roboport Type</label>
                         <SimpleEntitySelector
                             value={values.roboport}
-                            onChange={(value) => handleSelectorChange("roboport", value)}
+                            onSelectChange={(value) => handleSelectorChange("roboport", value)}
                             options={roboports}
                         />
                     </div>

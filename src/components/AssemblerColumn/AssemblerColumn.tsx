@@ -51,7 +51,7 @@ export default function AssemblerColumn({ columnId, className = "" }: Props) {
                 <div className="flex gap-2 mt-2">
                     <EntitySelector
                         entityType="recipe"
-                        onChange={
+                        onSelectChange={
                             (recipeName) => dispatch(addAssembler({ recipeName, columnId }))
                         }
                     >

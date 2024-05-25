@@ -46,7 +46,7 @@ export function AssemblerDrawer() {
             <div className="p-3 pb-0">
                 <div className="flex items-stretch">
                     <EntitySelector multi
-                        onChange={handleSelectorChange}
+                        onSelectChange={handleSelectorChange}
                         entityType="recipe"
                         selected={drawerRecipeNames}
                     >
@@ -58,7 +58,7 @@ export function AssemblerDrawer() {
                     <Button onClick={clearDrawer} aria-label="Clear Recipes"><FontAwesomeIcon icon={faTrash} /></Button>
                     <SimpleEntitySelector
                         value={ingredientFilter}
-                        onChange={setIngredientFilter}
+                        onSelectChange={setIngredientFilter}
                         renderOptionLabel={(option) => (
                             <><ItemIcon name={option.name} size="md" /> {option.count}</>
                         )}
